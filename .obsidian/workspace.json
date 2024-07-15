@@ -11,8 +11,12 @@
             "id": "b468eb317c03e9e8",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Web/Browser.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Web/Browser.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Web/Browser.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +124,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "Web/Browser.md"
+              }
             }
           }
         ]
@@ -141,7 +149,8 @@
   },
   "active": "b468eb317c03e9e8",
   "lastOpenFiles": [
-    "CS/Browser.md",
+    "Web",
+    "Web/Browser.md",
     "Javascript/Data Type, Variable.md",
     "CS/Data Structure.md",
     "Excalidraw/Drawing 2024-07-14 23.31.39.excalidraw.md",
