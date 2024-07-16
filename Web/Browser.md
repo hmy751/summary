@@ -8,7 +8,7 @@
 - Javascript Interpreter - 웹 컨텐츠를 조작하고 웹 페이지에 동적 동작을 가능하게 해주는 요소다.
 - Data Storage - 브라우저 동작에 필요한 자료를 저장하는 계층이다.
 
-# 브라우저 로딩 과정(렌더러 프로세스)
+# 브라우저 로딩 과정
 웹 페이지에 필요한 리소스를 받고 해석하여 여러 과정을 거쳐 콘텐츠를 보여주는 과정을 브라우저의 로딩 과정이라 한다.
 크게 Parsing => Calculate Style  => Layout => Paint => Composite & Render 과정으로 이루어진다.
 
