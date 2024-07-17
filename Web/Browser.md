@@ -45,26 +45,41 @@ CSS에서 %값으로 크기를 지정하면 레이아웃 단계를 거쳐 측정
 브라우저의 동시성을 위해 자바스크립트 엔진(콜 스택, Heap) 외에 이벤트 루프, Task Queue(테스크 큐), Web API등을 이용하여 브라우저가 지원 하여 처리한다.
 
 - Event Loop - 이벤트 루프는 콜 스택과 테스크 큐 사이에 위치 한다. 
-  콜 스택이 비어 있는지 감시하며 비어 있을 경우 테스크 큐에 있는 콜백 함수등을 콜 스택으로 전달한다.
-- Task Queue - Web API에서 전달 받은 setTimeout, 이벤트 헨들러등의 콜백 함수를 저장하는 공간이다. 
-- Web API - 콜 스택에서 전달 받은 콜백 함수를 받아 Timer 처리를 하며 설정된 시간 이후  테스크 큐로 전달하는 역할을 한다.
+  콜 스택이 비어 있는지 감시하며 비어 있을 경우 테스크 큐에 있는 작업을 콜 스택으로 전달하는 역할을 한다.
+- Web API - setTimeout, DOM, Fetch, HTTP 등 브라우저와 상호 작용할 수 있도록 하는 API 이다.
+- Task Queue - Web API 콜백 또는 이벤트 핸들러를 추후에 실행될 수 있도록 저장하는 공간이다.
 
-
+https://www.lydiahallie.com/blog/event-loop
 ### 이벤트 루프 처리 과정
 
 
-```js
-function foo() {
 
-}
-
-
-
-```
-
+먼저 console.log를 출력 한다.
+setTimeout함수를 호출하고 호출과 동시에 콜백 함수를 Web API에 넘겨기고 해당 실행 컨텍스트는 종료된다.
+Promise함수를 호출하여 실행 컨텍스트를 생성하고 콜백
 
 
 ## 마이크로 테스크 큐와 프로미스
+프로미스 콜백을 저장하며 추후에 실행될 수 있도록 저장하는 공간이다. 우선순위는 테스크 큐보다 더 높아 먼저 실행된다.
+```js
+console.log("start"); 
 
+setTimeout(() => { 
+  console.log("macrotask 1"); 
+},  0); 
+
+Promise.resolve() 
+  .then(() => { 
+    console.log("microtask 1"); 
+    }) 
+  .then(() => { 
+    console.log("microtask 2"); 
+  }); 
+
+requestAnimationFrame(() => { console.log("requestAnimationFrame callback"); }); 
+
+console.log("end");
+
+```
 
 ## requestAnimationFrame
