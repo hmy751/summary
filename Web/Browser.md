@@ -33,6 +33,79 @@ CSS에서 %값으로 크기를 지정하면 레이아웃 단계를 거쳐 측정
 ### Composite & Render(합성 & 렌더)
 페인트 단계에서 생성된 레이어를 합성하여 스크린을 업데이트하며 화면에서 웹 페이지를 볼 수 있다.
 
+## 브라우저의 성능 향상
+### 리플로우(레이아웃)과 리페인트
+브라우저의 렌더링은 상황에 따라 반복하여 발생한다. 재 렌더링 과정에서 요소에 기하학적인 영향을 주면 렌더 트리 부터 영향을 미쳐 레이아웃 과정 부터 수행하는데 이를 리플로우라고 한다. 
+기하학적인 영향을 주지않는 CSS속성값을 변경하여 레이아웃 과정을 건너 뛰고 페인트 부터 수행하는 과정을 리페인트라고 한다.
+
+레이아웃이 다시 발생하면 픽셀 부터 다시 계산해야하므로 부하가 더 크다. 따라서 성능을 향상하려면 기하적인 영향을 주지 않는 CSS를 최대한 활용해야 한다.
+- 기하적인 영향을 주는 CSS 속성값
+	- height
+	- width
+	- left
+	- top
+	- position
+	- font-size
+	- line-height
+- 기하적인 영향을 주지 않는 CSS 속성값
+	- background-color
+	- color
+	- visibility
+	- text-decoration
+	- transform
+https://docs.google.com/spreadsheets/u/0/d/1Hvi0nu2wG3oQ51XRHtMv-A_ZlidnwUYwgQsPQUg1R2s/pub?single=true&gid=0&output=html
+### 렌더링 최적화
+
+#### 레이아웃 최적화
+- 레이아웃 스레싱 피하기
+	offsetHeight, offsetTop과 같은 계산된 값을 속성으로 읽을 때 강제로 동기 레이아웃을 수행한다. 이를 피하기 위해 읽는 과정을 최소화 해야한다.
+	```js
+	for (let i = 0; i < target.length; i++) {
+		target[i].style.wiidth = box.offsetWidth;
+		...
+	}
+	
+	...
+	
+	const width = box.offsetWidth;
+	
+	for (let i = 0; i < target.length; i++) {
+		target[i].style.wiidth = width;
+		...
+	}
+	```
+
+- 가능한 하위 노드의 DOM을 조작하여 스타일을 변경하기
+	상위 노드의 스타일을 변경하면 하위에도 영향을 주기 때문에 최대한 하위 노드의 스타일을 변경한다.
+
+- 숨어있는 엘리먼트 수정
+	display: none 스타일은 애초에 공간을 차지하지 않기 때문에 변경하여도 리플로우와 리페인트가 발생하지 않지만 visibility: hidden은 보이지만 않기 때문에 변경하게 되면 리페인트는 발생하지 않지만 리플로우는 발생하게 된다.
+#### 애니메이션 최적화
+한 프레임에 16ms(60fps)안에 처리해야 자연스러운 애니메이션 처리가 되며 다음과 같은 방법등을 활용할 수 있다.
+
+- JS 보다는 CSS 애니메이션 활용
+	 자바스크립트 실행시간이 10ms 이내에 수행되어야 레이아웃과 페인트 과정을 포함하여 16ms안에 완료될 수 있다. 이때 JS실행 시간을 줄이기 위해 CSS를 활용하여 애니메이션을 처리하는게 권장된다.
+	 이때 position: absolute, transform: translate()를 활용할 수 있다.
+	 position: absolute는 주변 영역에 여향을 주지 않으며, transform: translate()는 레이어가 분리되며 엘리먼트에 영향을 주지 않기 때문이다.
+	 ```css
+	 .animation-item {
+		 positon: absolute;
+		 animation: move 3s ease infinite;
+	 }
+
+	@keyframes move {
+		50% {
+			transform: translate(100px, 100px);
+		}
+	}
+		
+		```
+	
+
+- requestAnimationFrame 활용
+	프레임 속도 60fps를 맞출수 있도록 간격이 설정되며 페인트 단계에서 실행되어 자연스러운 애니메이션 동작을 수행할 수 있도록 해준다.
+
+https://ui.toast.com/fe-guide/ko_PERFORMANCE
 # 브라우저의 동시성
 ---
 자바스크립트는 싱글 스레드 기반의 언어다. 싱글 스레드로 동작하기 때문에 [[Async, Promise#^c6e5a8|블로킹]]이 발생할 수 밖에 없고 자바스크립트 엔진 만으로는 브라우저의 동시성(Concurrency)을 지원할 수 없다.
@@ -124,7 +197,31 @@ console.log("end");
 ```
 
 ## requestAnimationFrame(rAF)
-rAF(requestAnimationFrame)은 브라우저의 리페인트 단계에서 애니메이션 함수를 호출할 수 있도록 하여 효율적으로 그릴수 있게 해주는 함수다.
+rAF(requestAnimationFrame)은 리페인트 단계에서 애니메이션 함수를 호출할 수 있도록 브라우저에 요청하는 함수로 효율적이고 자연스럽게 그릴수 있게 해준다.
 
-일반적인 타이머 함수인 setTimeout로 호출하는 방법과 차이점은 
-- 다음 프레임이 그려기실제 화면이 갱신되는 주기에 맞춰 리페인트 단계에서 실행할 수 있도록 
+대게 화면의 주사율은 60fps이며 1초에 60번 그려져야 애니메이션이 화면에 자연스럽게 그려지게 된다. 이를 위해 1000 / 60 ms마다 그려져야 하는데 rAF가 그에 맞게 그려질 수 있도록 한다.
+
+### 특징
+#### 프레임을 고려한 실행
+일반적인 타이머 함수로 애니메이션을 호출하게 되면 브라우저 로딩 과정중에 콜 스택에서 실행하게 되고 다시 리플로우가 발생하게 된다. rAF를 사용하게 되면 프레임을 고려하여 리페인트 단계에서 실행하게 하여 프레임이 지연되는 문제가 해결된다.
+
+#### 백그라운드 동작 중지
+일반적인 타이머 함수를 실행하게 되면 브라우저가 다른 탭을 보거나 비활성화 될때에도 실행되어 리소스가 낭비 되는데 rAF는 실행이 중지되어 리소스를 낭비하지 않게 된다.
+
+#### 주사율에 맞게 호출
+무조건 1초에 60번 호출하지 않고 디스플레이의 주사율에 맞게 호출한다. 예를들어 144hz이면 1초에 144번 호출할 수 있도록 최적화 하여 호출하게 한다.
+
+## Animation Frames
+rAF의 콜백 함수는  테스크 큐나 마이로테스크 큐가 아닌 Animation frames에 댬겨서 처리 된다.
+
+### 사용법
+인자로 실행할 콜백 함수를 받으며 재귀 형태로 호출하여 애니메이션을 실행 한다.
+```js
+const animation = () => {
+	...
+	
+	requestAnimationFrame(animation);
+};
+
+requestAnimationFrame(animation);
+```
