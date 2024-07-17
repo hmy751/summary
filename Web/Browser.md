@@ -64,6 +64,7 @@ function foo() {
 
 
 
-### 마이크로 테스크 큐와 프로미스
+## 마이크로 테스크 큐와 프로미스
 
 
+## requestAnimationFrame
