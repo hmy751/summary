@@ -226,3 +226,15 @@ const animation = () => {
 
 requestAnimationFrame(animation);
 ```
+
+
+```js
+const a = 5;
+const b = 5;
+
+const c = { x: 1};
+const d = { x: 1};
+
+
+
+```
