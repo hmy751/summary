@@ -42,7 +42,7 @@ function makeCounter(aux) {
 - 고차 함수
 등이 가능해진다.
 
-# Callback Funciton
+# Callback Function
 ---
 콜백 함수는 다른 함수의 매개변수로 전달되며 **제어권**이 함께 위임된 함수를 말한다.
 
