@@ -11,7 +11,7 @@
 [[Stack, Queue]]
 [[Tree]]
 [[Graph]]
-
+[[Hash Map]]
 
 
 
