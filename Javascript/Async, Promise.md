@@ -77,3 +77,5 @@ try {
 ## fetch
 fetch는 HTTP 요청을 처리하는 Web API이다.
 fetch함수는 HTTP 응답인 Response를 가지는 **Promise객체를 반환**한다.
+
+# Async/Await
