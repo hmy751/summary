@@ -81,6 +81,10 @@ https://docs.google.com/spreadsheets/u/0/d/1Hvi0nu2wG3oQ51XRHtMv-A_ZlidnwUYwgQsP
 
 - 숨어있는 엘리먼트 수정
 	display: none 스타일은 애초에 공간을 차지하지 않기 때문에 변경하여도 리플로우와 리페인트가 발생하지 않지만 visibility: hidden은 보이지만 않기 때문에 변경하게 되면 리페인트는 발생하지 않지만 리플로우는 발생하게 된다.
+
+https://developer.mozilla.org/en-US/docs/Glossary/Render_blocking
+https://developer.mozilla.org/en-US/docs/Learn/Performance/CSS
+https://developer.mozilla.org/en-US/docs/Learn/Performance/JavaScript
 #### 애니메이션 최적화
 한 프레임에 16ms(60fps)안에 처리해야 자연스러운 애니메이션 처리가 되며 다음과 같은 방법등을 활용할 수 있다.
 
@@ -106,6 +110,7 @@ https://docs.google.com/spreadsheets/u/0/d/1Hvi0nu2wG3oQ51XRHtMv-A_ZlidnwUYwgQsP
 - requestAnimationFrame 활용
 	프레임 속도 60fps를 맞출수 있도록 간격이 설정되며 페인트 단계에서 실행되어 자연스러운 애니메이션 동작을 수행할 수 있도록 해준다.
 
+https://www.erwinhofman.com/blog/parsing-and-rendering-process-simplified/
 https://ui.toast.com/fe-guide/ko_PERFORMANCE
 # 브라우저의 동시성
 ---
