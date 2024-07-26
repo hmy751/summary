@@ -11,7 +11,6 @@
 # 브라우저의 로딩 과정
 ---
 ## 브라우저의 렌더링 과정
-
 웹 페이지에 필요한 리소스를 받고 해석하여 여러 과정을 거쳐 콘텐츠를 보여주는 과정을 브라우저의 렌더링 과정이라 한다.
 크게 Parsing => Calculate Style  => Layout => Paint => Composite & Render 과정으로 이루어진다.
 그리고 이 과정들을 Critical Rendering Path(중요 렌더링 경로)라고 말한다.
