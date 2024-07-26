@@ -13,7 +13,7 @@
 ## 브라우저의 렌더링 과정
 웹 페이지에 필요한 리소스를 받고 해석하여 여러 과정을 거쳐 콘텐츠를 보여주는 과정을 브라우저의 렌더링 과정이라 한다.
 크게 Parsing => Calculate Style  => Layout => Paint => Composite & Render 과정으로 이루어진다.
-그리고 이 과정들을 Critical Rendering Path(중요 렌더링 경로)라고 말한다.
+
 ### Parsing(파싱)
 파싱은 브라우저가 코드를 이해하고 사용할 수 있는 구조로 변환하는 작업을 의미한다. HTML파일을 해석하여 리소스 구성에 따라 DOM 트리 및 CSSOM 트리를 구성한다.
 파싱 결과는 부모-자식 관계를 가지는 노트 트리 구조이다.
@@ -33,12 +33,40 @@ CSS에서 %값으로 크기를 지정하면 레이아웃 단계를 거쳐 측정
 페인트 단계에서 생성된 레이어를 합성하여 스크린을 업데이트하며 화면에서 웹 페이지를 볼 수 있다.
 
 ## 브라우저의 성능 향상
-### 리플로우(레이아웃)과 리페인트
-브라우저의 렌더링은 상황에 따라 반복하여 발생한다. 재 렌더링 과정에서 요소에 기하학적인 영향을 주면 렌더 트리 부터 영향을 미쳐 레이아웃 과정 부터 수행하는데 이를 리플로우라고 한다. 
-기하학적인 영향을 주지않는 CSS속성값을 변경하여 레이아웃 과정을 건너 뛰고 페인트 부터 수행하는 과정을 리페인트라고 한다.
+### 크리티컬 렌더링 패스(Critical Rendering Path)
+크리티컬 렌더링 패스는 웹 페이지가 유저에게 빠르게 보여지기 위해 최적화 되어야 하는 중요한 경로를 말한다. 주로 초기 렌더링과 관련되어 있으며 경로의 구성은 HTML 파싱, CSS 파싱 => 렌더 트리 생성 => 레이아웃 => 페인트로 구성된다.
+브라우저의 렌더링과 차이점은 브라우저의 렌더링은 유저에게 보여지는 모든 과정을 의미하며, 크리티컬 렌더링 패스는 초기 렌더링과 관련되어 있다.
 
-레이아웃이 다시 발생하면 픽셀 부터 다시 계산해야하므로 부하가 더 크다. 따라서 성능을 향상하려면 기하적인 영향을 주지 않는 CSS를 최대한 활용해야 한다.
-- 기하적인 영향을 주는 CSS 속성값
+### 렌더 블로킹(Render Blocking)
+브라우저 렌더링 과정 중에 HTML, CSS, JS파일을 만나면 파싱 과정을 거친다.
+먼저 HTML파일을 다운받아 읽어 파싱과정을 거친다. 파싱하는 과정 중간에 script태그나 style, link태그 등을 만나면 HTML파싱을 중단하며 DOM트리 생성이 중단되는데 이를 렌더 블로킹이라고 한다.
+https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources?hl=ko
+
+#### CSS에 의한 렌더 블로킹
+HTML 파싱 중간에 link, style태그를 만난 경우 해당 CSS파일을 로드하여 파싱한 후 CSSOM트리를 만든다.
+DOM트리 생성 중간에 이를 방지하기 위해 style, link태그는 head태그에 위치하여 미리 로드후 CSSOM을 생성시킨다.
+
+#### JS에 의한 렌더 블로킹
+HTML 파싱 중간에 script태그를 만난경우 즉시 JS파일을 로드하여 파싱한 후 실행하게 된다.
+DOM트리 생성 전에 자바스크립트가 실행 되므로 아직 요소가 없다면 정상적으로 동작하지 않을 수 있다.
+이를 방지 하기 위해 script태그는 body태그에 최 하단에 위치시킨다.
+이렇게 하면 블로킹도 방지하고 페이지 로딩시간도 단축 된다.
+
+- async, defer 어트리뷰트
+자바스크립트 파싱에 의한 블로킹을 해결하기위해 사용된다.
+async와 defer어트리뷰트는 src 어트리뷰트를 통해 외부 자바스크립트 파일을 로드하는 경우에만 사용할 수 있다. src어트리뷰트가 없는 인라인 자바스크립트에는 사용할 수 없다.
+둘 다 사용하게 되면 자바스크립트 파일의 로딩이 비동기적으로 HTML파싱과 동시에 진행된다.
+하지만 async 어트리뷰트의 경우 자바스크립트의 비동기 로딩이 완료되면 HTML파싱을 중단하고 자바스크립트의 파싱과 실행을 진행한다.
+defer 어트리뷰트의 경우 자바스크립트 로딩이 완료돼도 HTML파싱을 계속 진행하고 **HTML의 파싱이 완료된 직후**, 즉 **DOM 생성이 완료**되는 **DOMContentLoaded 이벤트 발생 시점**에 자바스크립트의 파싱과 실행을 진행한다.
+
+
+### 리플로우(레이아웃)과 리페인트
+브라우저의 렌더링은 상황에 따라 반복하여 발생한다. 재 렌더링 과정에서 요소에 기하학적인 영향을 주면 렌더 트리 부터 영향을 미쳐 레이아웃 과정 부터 다시 수행하는데 이를 리플로우라고 한다. 
+기하학적인 영향을 주지않는 CSS속성값을 변경하여 리플로우 과정을 건너 뛰고 페인트 부터 수행하는 과정을 리페인트라고 한다.
+
+레이아웃이 다시 발생하면 픽셀 부터 다시 계산해야하므로 리페인트에 비해 부하가 더 크다. 따라서 성능을 향상하려면 가능한 기하학적인 영향을 주지 않는 CSS를 최대한 활용해야 한다.
+
+- 기하학적인 영향을 주는 CSS 속성값
 	- height
 	- width
 	- left
@@ -46,15 +74,15 @@ CSS에서 %값으로 크기를 지정하면 레이아웃 단계를 거쳐 측정
 	- position
 	- font-size
 	- line-height
-- 기하적인 영향을 주지 않는 CSS 속성값
+- 기하학적인 영향을 주지 않는 CSS 속성값
 	- background-color
 	- color
 	- visibility
 	- text-decoration
 	- transform
 https://docs.google.com/spreadsheets/u/0/d/1Hvi0nu2wG3oQ51XRHtMv-A_ZlidnwUYwgQsPQUg1R2s/pub?single=true&gid=0&output=html
-### 렌더링 최적화
 
+### 렌더링 최적화
 #### 레이아웃 최적화
 - 레이아웃 스레싱 피하기
 	offsetHeight, offsetTop과 같은 계산된 값을 속성으로 읽을 때 강제로 동기 레이아웃을 수행한다. 이를 피하기 위해 읽는 과정을 최소화 해야한다.
@@ -83,6 +111,7 @@ https://docs.google.com/spreadsheets/u/0/d/1Hvi0nu2wG3oQ51XRHtMv-A_ZlidnwUYwgQsP
 https://developer.mozilla.org/en-US/docs/Glossary/Render_blocking
 https://developer.mozilla.org/en-US/docs/Learn/Performance/CSS
 https://developer.mozilla.org/en-US/docs/Learn/Performance/JavaScript
+
 #### 애니메이션 최적화
 한 프레임에 16ms(60fps)안에 처리해야 자연스러운 애니메이션 처리가 되며 다음과 같은 방법등을 활용할 수 있다.
 
@@ -110,6 +139,7 @@ https://developer.mozilla.org/en-US/docs/Learn/Performance/JavaScript
 
 https://www.erwinhofman.com/blog/parsing-and-rendering-process-simplified/
 https://ui.toast.com/fe-guide/ko_PERFORMANCE
+
 # 브라우저의 동시성
 ---
 자바스크립트는 싱글 스레드 기반의 언어다. 싱글 스레드로 동작하기 때문에 [[Async, Promise#^c6e5a8|블로킹]]이 발생할 수 밖에 없고 자바스크립트 엔진 만으로는 브라우저의 동시성(Concurrency)을 지원할 수 없다.

@@ -11,12 +11,12 @@ prototype 객체는 프로토타입의 상속을 구현해주기 위해 사용�
 그리고 모든 객체는 `[Prototype]`이라는 내부 슬롯을 가지는데,  이`[Prototype]`슬롯을 통해 자신이 상속받은 prototype객체를 바라본다.  `[Prototype]`내부 슬롯에 직접 접근할 수 는 없으며  `__proto__`프로퍼티를 통해서 prototype객체를 바라보는`[Prototype]` 내부 슬롯을 통해 prototype객체에 접근할 수 있게 된다.
 
 ### `__proto__` 프로퍼티
---proto--프로퍼티는 객체가 직접 소유하는 프로퍼티가 아니라 Object.prototype의 프로퍼티다.
-모든 객체는 상속을 통해서 --proto--에 접근하게 되는 것이다.
+`__proto__`프로퍼티는 객체가 직접 소유하는 프로퍼티가 아니라 Object.prototype의 프로퍼티다.
+모든 객체는 상속을 통해서 `__proto__`에 접근하게 되는 것이다.
 
-- --proto--로 접근하는 이유
-`[Prototype]` 내부 슬롯으로 직접 접근하게 되면 순환 참조와 같은 에러를 막지 못하게 되며 오류를 발생시킬 수 있어 --proto--를 통해서 간접적으로 접근하게 된다.
-아래 코드 처럼 --proto--를 통해서 순환 참조가 일어나게 되면 에러를 발생시켜 순환 참조를 방지한다.
+- `__proto__`로 접근하는 이유
+`[Prototype]` 내부 슬롯으로 직접 접근하게 되면 순환 참조와 같은 에러를 막지 못하게 되며 오류를 발생시킬 수 있어 `__proto__`를 통해서 간접적으로 접근하게 된다.
+아래 코드 처럼 `__proto__`를 통해서 순환 참조가 일어나게 되면 에러를 발생시켜 순환 참조를 방지한다.
 ```js
 const parent = {};
 const child = {};
@@ -25,9 +25,9 @@ child.__proto__ = parent;
 parent.__proto__ = child; // TypeError: Cycle __proto__ value
 ```
 
-- --proto--를 직접 사용하는 것은 권장되지 않는다.
---proto--는 Object.prototype의 프로퍼티다. 만약 Object.prototype와의 상속이 끊어지게 되면 해당 프로퍼티로 접근이 불가능하게 된다.
---proto--대신 getPrototypeOf를 통해서 prototype객체에 접근할 수 있다.
+- `__proto__`를 직접 사용하는 것은 권장되지 않는다.
+`__proto__`는 Object.prototype의 프로퍼티다. 만약 Object.prototype와의 상속이 끊어지게 되면 해당 프로퍼티로 접근이 불가능하게 된다.
+`__proto__`대신 getPrototypeOf를 통해서 prototype객체에 접근할 수 있다.
 
 ## 프로토타입 상속 과정과 시점
 ### 생성자 함수의 프로토타입 상속 과정과 생성 시점
