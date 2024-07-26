@@ -37,7 +37,7 @@ CSS에서 %값으로 크기를 지정하면 레이아웃 단계를 거쳐 측정
 크리티컬 렌더링 패스는 웹 페이지가 유저에게 빠르게 보여지기 위해 최적화 되어야 하는 중요한 경로를 말한다. 주로 초기 렌더링과 관련되어 있으며 경로의 구성은 HTML 파싱, CSS 파싱 => 렌더 트리 생성 => 레이아웃 => 페인트로 구성된다.
 브라우저의 렌더링과 차이점은 브라우저의 렌더링은 유저에게 보여지는 모든 과정을 의미하며, 크리티컬 렌더링 패스는 초기 렌더링과 관련되어 있다.
 
-### 렌더 블로킹(Render Blocking)
+### 렌더 블로킹(Render Blocking), 블록 리소스 최적화
 브라우저 렌더링 과정 중에 HTML, CSS, JS파일을 만나면 파싱 과정을 거친다.
 먼저 HTML파일을 다운받아 읽어 파싱과정을 거친다. 파싱하는 과정 중간에 script태그나 style, link태그 등을 만나면 HTML파싱을 중단하며 DOM트리 생성이 중단되는데 이를 렌더 블로킹이라고 한다.
 https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources?hl=ko
@@ -82,25 +82,34 @@ defer 어트리뷰트의 경우 자바스크립트 로딩이 완료돼도 HTML�
 	- transform
 https://docs.google.com/spreadsheets/u/0/d/1Hvi0nu2wG3oQ51XRHtMv-A_ZlidnwUYwgQsPQUg1R2s/pub?single=true&gid=0&output=html
 
-### 렌더링 최적화
 #### 레이아웃 최적화
+- 강제 동기 레이아웃
+강제 동기 레이아웃은 자바스크립트의 코드 실행중에 DOM의 스타일을 변경한 후 offsetHeight과 같은 계산된 값을 속성으로 읽을 때 강제로 레이아웃을 수행하는 것을 말한다.
+
+원래 자바스크립트 실행 후 스타일 단계를 거쳐서 레이아웃을 진행하지만 스타일을 변경하면 이전 레이아웃이 무효하다고 판단하며, 이때 offsetHeight과 같은 계산된 값을 속성으로 읽으려고 할때 바로 레이아웃 과정을 거쳐 필요한 계산값을 읽어 들이게 된다.
+
+해당 과정은 성능을 저하시키므로 지양해야 합니다.
+
 - 레이아웃 스레싱 피하기
-	offsetHeight, offsetTop과 같은 계산된 값을 속성으로 읽을 때 강제로 동기 레이아웃을 수행한다. 이를 피하기 위해 읽는 과정을 최소화 해야한다.
-	```js
-	for (let i = 0; i < target.length; i++) {
-		target[i].style.wiidth = box.offsetWidth;
-		...
-	}
-	
-	...
-	
-	const width = box.offsetWidth;
-	
-	for (let i = 0; i < target.length; i++) {
-		target[i].style.wiidth = width;
-		...
-	}
-	```
+한 프레임 내에서 강제 동기 레이아웃을 연속적으로 발생시키는 것을 레이아웃 스레싱이라고 한다.
+
+해당 현상이 발생하는 경우는 반복문에서 요소를 순회할 때 해당 요소의 값을 읽으면서 변경하는 경우 강제 동기 레이아웃 과정이 계속해서 발생하게 된다.
+
+```jsx
+for (let i = 0; i < paragraphs.length; i++) {
+	paragraphs[i].style.width = box.offsetWidth + 'px';
+}
+```
+
+개선 방법은 필요한 값을 변수로 할당하여 반복문 바깥에서 선언하고 할당 과정만 반복하여 레이아웃 스래싱을 피할 수 있다.
+
+```jsx
+const boxOffset = box.offsetWidth;
+
+for (let i = 0; i < paragraphs.length; i++) {
+	paragraphs[i].style.width = boxOffset + 'px';
+}
+```
 
 - 가능한 하위 노드의 DOM을 조작하여 스타일을 변경하기
 	상위 노드의 스타일을 변경하면 하위에도 영향을 주기 때문에 최대한 하위 노드의 스타일을 변경한다.
@@ -133,7 +142,6 @@ https://developer.mozilla.org/en-US/docs/Learn/Performance/JavaScript
 		
 		```
 	
-
 - requestAnimationFrame 활용
 	프레임 속도 60fps를 맞출수 있도록 간격이 설정되며 페인트 단계에서 실행되어 자연스러운 애니메이션 동작을 수행할 수 있도록 해준다.
 
@@ -154,6 +162,7 @@ https://ui.toast.com/fe-guide/ko_PERFORMANCE
 - Task Queue - Web API 콜백 또는 이벤트 핸들러를 추후에 실행될 수 있도록 저장하는 공간이다.
 
 https://www.lydiahallie.com/blog/event-loop
+
 ### 이벤트 루프 처리 과정
 ```js
 setTimeout(() => {
