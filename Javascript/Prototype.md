@@ -37,31 +37,22 @@ Object.create
 
 ```js
 
-function Human(name) {
+function Person(name) {
 	this.name = name;
-	
 }
 
-Human.prototype.getName = () => {
-	console.log('getName');
+const me = new Person('lee');
+
+const parent = {
+	sayHello() {
+	}
 }
 
-function Student(number) {
-	this.number = number;
-}
+Person.prototype = parent;
 
-Student.prototype = Human.prototype;
-    
-const john = new Student(1);
+me.sayHello();
 
-Student.prototype.getName = () => {
-    console.log('changed method');
-}
-
-const human = new Human('human');
-
-human.getName();
-
+console.log(me.constructor === Person);
 
 
 ```
