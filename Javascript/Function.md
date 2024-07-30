@@ -49,6 +49,7 @@ function makeCounter(aux) {
 ## 제어권
 전달되는 제어권에는 호출 시점, 인자, this등이 있다.
 
+- 인자
 콜백함수를 넘겨 받은 함수가 인자에 대해 지정을 해놓으면, 콜백 함수 자체에서 네이밍을 바꿔도 넘겨 받은 함수를 기준으로 결정 된다.
 ```js
 Array.prototype.map(callback[, thisArg]);
@@ -59,31 +60,22 @@ const arr = [1, 2, 3].map(function (index, value) {
 });
 ```
 
-호출 시점은 넘겨 받은 함수가 결정을 하는데 예를 들어 타이머 함수인 setTimeout에서 콜백 함수의 호출 시점을 결정한다.
+- 호출 시점
+호출 시점은 넘겨 받은 함수가 결정을 하는데 예를 들어 타이머 함수인 setTimeout에서 콜백 함수의 호출 시점을 결정할 수 있다.
 
+- this
 this의 경우도 넘겨 받은 함수가 결정하게 된다. map의 경우 내부에서 콜백 함수의 this바인딩을 처리하게 된다.
 ```js
 
 Array.prototype.map = function (callback, thisArg) {
+	var mappedArr = []
 
-var mappedArr = []
+	for (var i = 0; i < this.length; i++) {
+		var newValue = callback.call(thisArg || window, this[i], i, thisArg || this);
+		mappedArr[i] = newValue
+    }
 
-  
-
-for (var i = 0; i < this.length; i++) {
-
-var newValue = callback.call(thisArg || window, this[i], i, thisArg || this)
-
-  
-
-mappedArr[i] = newValue
-
-}
-
-  
-
-return mappedArr
-
+	return mappedArr
 }
 
 ```
@@ -116,7 +108,25 @@ outer1(); // 3
 
 클로저가 발생하는 이유는 함수의 실행 컨텍스트가 종료돼 콜 스택에서 제거 되어도 변수가 계속 참조되어지고 있는 상황이면 가비지 컬렉터 해당 렉시컬 환경을 수거하지 않기 때문이다.
 
-## 클로저의 이점
+## 클로저와 렉시컬 환경
+클로저는 렉시컬 환경의 조합이다. 
+```js
+const x = 1;
+
+function outerFunc() {
+	const x = 10;
+	innerFunc();
+}
+
+function innerFunc() {
+	console.log(x); // 1
+}
+
+outerFunc();
+
+```
+
+## 클로저의 이점과 단점
 	
 
 ## 클로저 활용
