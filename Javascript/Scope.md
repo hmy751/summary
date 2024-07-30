@@ -3,7 +3,7 @@
 
 # 렉시컬 스코프(Lexical Scope)
 
-^0aec4c
+^007731
 
 ---
 스코프에는 정적 스코프(static scope), 동적 스코프(dynamic scope) 방식이 있다. 
