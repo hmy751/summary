@@ -63,14 +63,8 @@ function inner() {
 outerEnvironmentReference는 현재 컨텍스트의 함수가 선언되는 시점의 컨텍스트에서 LexicalEnvironment를 담는다. 
 정확히 outerEnvironmentReference는 해당 함수 객체 내부 슬롯인`[Environment]`을 통해 함수가 평가되는 시점에 LexicalEnvironment를 참조하여 접근하게 된다.
 따라서 현재 컨텍스트 뿐만 아니라 선언되는 시점에, 바깥의 컨텍스트의 식별자 정보를 참조할 수 있게 된다.
-
-> [!NOTE]
-> - `[Environment]`슬롯
-> 함수가 정의 되고 평가되는 시점에 자신이 정의된 위치를 기준으로 **상위 스코프**의 **렉시컬 환경(LexicalEnvironment)**을 저장하는 내부 슬롯이다.
-> `[Environment]`는 실행이 아닌 평가되는 시점을 기준으로 상위 스코프 참조를 결정하므로 정적 스코프 즉 선언 기준으로 스코프가 형성된다.
-> 따라서 자바스크립트는 정적 스코프인 렉시컬 스코프를 따르게 된다.
 [[Scope#^007731]]
-> 
+
 
 ```js
 var a = 1;
