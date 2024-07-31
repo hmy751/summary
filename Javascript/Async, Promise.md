@@ -42,20 +42,28 @@ bar();
 브라우저는 멀티 스레드로 동작하며, 브라우저내 자바스크립트 엔진이 싱글 스레드로 동작한다.
 
 # Promise
-
+---
 프로미스란? 비동기 처리 상태와 처리 결과를 관리하는 객체다.
 프로미스는 Promise 생성자 함수가 인수로 전달받은 콜백 함수 내부에서 비동기 처리를 수행한다.
 이때 성공하면 resolve함수를 호출하고, 실패하면 reject함수를 호출한다.
-프로미스는 비동기 처리에 대한 상태 pending, fulfilled, rejected 촐 3가지를 갖는다.
+```js
+const promise = new Promise((rseolve, reject) => {
+	if (response.status === 200) {
+		resolve(response);
+	} else {
+		reject(reponse.error);
+	}
+});
+```
+프로미스는 비동기 처리에 대한 상태 와 결과 값을 저장한다.
+`[PromiseState]`에 상태 값 pending, fulfilled, rejected 3가지와 `[PromiseResult]`에 처리 결과 값을 저장한다.
 
 ## 프로미스가 필요한 이유
-
 - 비동기 함수 동작
   비동기 함수는 비동기 함수의 처리 결과를 외부에 반환할 수 없고, 상위 스코프의 변수에 할당할 수도 없다.
   따라서 처리 결과에대한 후속처리는 비동기 함수 내부에서 수행해야 하는데 이렇게 하면 코드가 중첩되어 복잡도가 증가하는 콜백 지옥 현상이 발생할 수 있다.
 
 - 에러 처리의 한계
-
 ```js
 try {
   setTimeout(() => {
@@ -68,6 +76,73 @@ try {
 
 에러 처리를 위해 try/catch구문을 사용할 때, setTimeout함수와 같이 일반적인 비동기 함수 형태로 처리한다면 catch구문에 에러가 잡히지 않는다.
 에러는 콜 스택에서 caller(호출자)방향으로 전파된다. 즉 이전 실행 컨텍스트 방향으로 전파되는데 setTimeout함수의 콜백 함수는 setTimeout함수의 실행 컨텍스트가 종료된 후 실행 되므로 이전 실행 컨텍스트로 에러가 전파되지 않으면서 catch에서 에러를 감지하지 못한다.
+
+## 프로미스 후속 처리 메서드
+ then, catch, finally는 비동기 처리 상태가 변하면 후속 처리 메서드에 인수로 전달한 콜백함수가 호출된다.
+ ```js
+const promise1 = new Promise((resolve, reject) => {
+	resolve('success');
+});
+
+console.log(promise1); 
+// 동기적으로 실행하기 때문에 promise의 반환을 확인하지는 못한다.
+
+promise1
+	.then(() => {
+		(result) => console.log(result); // 'success'
+	})
+
+```
+### Promise.prototype.then
+두 개의 콜백 함수를 인수로 전달 받는다. 첫 번째는 프로미스가 fullfillled 되면 호출되고 비동기 처리 결과를 인수로 받는다.
+그리고 then메서드는 언제나 프로미스를 반환한다.
+
+### Promise.prototype.catch
+한 개의 콜백함수를 받으며 프로미스가 rejected상태인 경우에만 호출된다.
+then메서드와 마찬가치로 언제나 프로미스를 반환한다.
+then을 통해서도 에러처리가 가능하지만 then내부의 콜백 함수의 에러 발생 시 catch를 통해서 감지할 수 있다.
+해당 문제 뿐만 아니라 가독성을 위해서 catch를 사용하는게 낫다.
+
+### Promise.prototype.finally
+프로미스의 성공, 실패 여부와 상관없이 무조건 한 번 호출된다. 상태와 관계없이 공통적으로 수행해야 할 처리가 있을 때 유용하다.
+
+### 프로미스 체이닝
+프로미스와 후속 처리 메서드를 이용해 콜백 헬을 해결할 수 있다.
+후속 처리 메서드들은 모두 프로미스를 반환하여 연속적으로 연결하여 처리를 할 수 있는데 이를 프로미스 체이닝이라고 한다.
+```js
+const promise1 = new Promise((resolve, reject) => {
+	if (res.success) {
+		resolve('success');
+	}
+
+	reject(new Error('error'));
+});
+
+promise1
+	.then(() => {
+		(result) => console.log(result); // 'success'
+	})
+	.catch((err) => console.log(err)) // 'error'
+	.finally(() => console.log('finish'));
+
+```
+
+## 프로미스의 정적 메서드
+
+### Promise.all
+배열을 통해 여러개의 프로미스를 전달 받는다. 전달 받은 프로미스를 동시에 병렬로 실행 시킬 수 있다.
+만약 하나라도 rejected되면 즉시 거부되어 에러를 발생하고 나머지 모든 프로미스의 결과도 무시된다.
+다수의 프로미스를 병렬로 실행시킬 때 유용하다.
+
+### Promise.race
+배열을 통해 여러개의 프로미스를 전달 받는다. 전달 받은 프로미스를 동시에 병렬로 실행 시킬 수 있다.
+Promise.all과 차이점은 단 하나의 가장 빨리 처리된 프로미스의 결과를 반환 한다.
+
+### Promise.allSettled
+
+
+
+
 
 ## 마이크로 테스크 큐
 마이크로 테스크 큐는 테스크 큐와는 별도로 프로미스 후속 처리 메서드의 콜백 함수가 저장되는 공간이다.
