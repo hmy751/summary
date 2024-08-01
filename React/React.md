@@ -1,5 +1,5 @@
 # 리액트에서 동등 비교
-[[Data Type, Variable#^5180cc]]
+[[Variable, Data#^5180cc]]
 [[Basic#^ef3ef9]]
 리액트에서 값을 비교할 때는 shallowEqual이라는 메서드를 통해서 비교한다.
 shallowEqual은 기본적으로 Object.is()메서드를 기준으로 먼저 비교한다.
