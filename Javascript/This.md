@@ -107,8 +107,107 @@ obj.foo();
 apply, call, bind를 통해서 명시하는 방법도 있다.
 
 ### 메서드 호출
+this는 소유한 객체가 아니라 호출 시점에 메서드를 호출한 객체에 바인딩 된다.
+```js
+const Person = {
+	name: 'Lee',
+	getName() {
+		return this.name;
+	}
+};
 
+const anotherPerson = {
+	name: 'Kim'
+};
 
+anotherPerson.getName = person.getname;
 
+console.log(anotherPerson.getName()); // Kim
+
+```
+
+프로토타입 메서드 내부에서 사용된 this도 호출한 주체에 바인딩 된다.
+```js
+function Person(name) {
+  this.name = name;
+}
+
+Person.prototype.getName = function () {
+	return this.name;
+};
+
+const me = new Person('Lee');
+
+Person.prototype.name = 'Kim';
+
+console.log(me.getName()); // Lee
+console.log(Person.prototype.getName()); // Kim
+
+```
+![[Javascript/This.excalidraw.md#^group=vV8P34G0ctE8tQfwzyehW|1200]]
 
 ### 생성자 함수 호출
+생성자 함수 내부의 this는 생성자 함수가 만들 인스턴스가 바인딩 된다.
+```js
+function Circle(radius) {
+	this.radius = radius;
+	this.getDiameter = function () {
+		return 2 * this.radius;
+	}
+}
+
+const circle1 = new Circle(5);
+circle1.getDiameter(); // 10
+```
+
+new를 사용하지 않고 호출하면 생성자 함수로서 호출되지 않고 일반함수로 호출 되므로 인스턴스가 아닌 전역 객체가 바인딩된다.
+
+## Function.prototype.apply/call/bind
+- apply/call
+apply, call은 this로 사용할 객체와 인수 리스트를 매개변수로 전달받아 함수를 호출한다.
+```js
+function getThisBinding() {
+	console.log(arguments);
+	return this;
+}
+
+const thisArg = { a: 1 };
+
+console.log(getThisBinding.apply(thisArg, [1, 2, 3])); // [1, 2, 3], { a: 1 }
+console.log(getThisBinding.call(thisArg, 1, 2, 3)); // [1, 2, 3], { a: 1 }
+```
+두 메서드 모두 함수를 호출한다. 차이점은 인자를 전달하는 방식이다.
+
+arguments와 같은 유사 배열 객체를 배열로 만들 때도 활용이 가능하다.
+```js
+const arr = Array.prototype.slice.call(arguments);
+```
+slice 메서드는 인수없이 사용하면 새로운 배열을 만들고 여기에 arguments를 바인딩 하여 호출하면 유사 배열 객체를 배열로 변환된다.
+
+- bind
+apply, call과 달리 함수를 호출하지 않고 this를 바인딩한 함수를 생성해 반환한다.
+```js
+function getThisBinding() {
+	return this;
+}
+
+const thisArg = { a: 1 };
+
+const bindingFunc = getThisBinding.bind(thisArg);
+
+console.log(bindingFunc()); // { a: 1 }
+```
+
+메서드 내부의 중첩 함수, 콜백 함수등 헬퍼 함수로서 소유한 객체와 this를 일치시키려고 할 때 사용된다.
+```js
+const person = {
+	name: 'Lee',
+	foo() {
+		setTimeout(function() {
+			console.log(this);
+		}.bind(this), 100);
+	}
+}
+
+person.foo(); // Lee
+``` 
