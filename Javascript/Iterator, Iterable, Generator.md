@@ -4,6 +4,7 @@
 이터레이터(Iterator) 프로토콜은 next 메서드를 소유하고 이 next 메서드에서 호출 시 이터러블 객체를 순회하여 { value: any, done: boolean }의 형태인 이터레이터 result 객체를 반환하는 규칙이다.
 이 이터레이터 프로토콜을 만족하는 객체를 이터레이터 객체라고 한다.
 이터레이터는 Symbol.iterator 메서드를 통해 반환 되며 next 메서드를 가진다.
+[[Data Type#^676c3f]]
 ![[Javascript/Iterator, Iterable, Generator.excalidraw.md#^area=Ovv8RNkLM25mVvPlQ2eXe|1200]]
 
 ## Iterable
@@ -198,7 +199,60 @@ generator.next(); // { value: undefined, done: true }
 ```
 
 ## 일시중지, 재개
+제너레이터 객체의 next 메서드를 호출하면 yield 표현식까지 실행되고 일시 중지된다. 이때 함수의 제어권이 호출자로 양도된다.
+이후 필요한 시점에 호출자가 또다시 next메서드를 호출하면 실행을 재개하고 일시 중지한 다음 함수의 제어권이 다음 호출자로 또 양도된다.
+이때 next메서드는 이터레이터 리절트 객체를 반환한다.
 
+### yield는 제너레이터 안밖으로 정보를 교환할 수 있다.
+바깥으로 반환 뿐만 아니라 바깥의 인자를 내부로 들여올 수 도 있다.
+generator.next(arg)를 호출하면 arg는 yield의 결과가 된다.
+```js
+function* genFunc() {
+	const x = yield 1;
+	const y = yield(x + 10);
+	return x + y;
+}
+
+const generator = genFunc();
+
+console.log(generator.next()); // { value: 1, done: false }
+// 첫 번째 호출에서는 인수가 넘어오지 않는다.
+console.log(generator.next(10)); // { value: 20, done: false }
+// 두 번째 호출에서 인자는 첫 번째 yield의 반환값으로 할당된다. 그래서 x는 인자 10으로 할당되며
+// x + 10의 값이 밖으로 반환되어 value에는 20이 나오게 된다.
+console.log(generator.next(20)); // { value: 30, done: true }
+
+
+```
+
+일반 함수와는 다르게 제너레이터와 외부 호출 코드는 next/yield를 이용해 결과를 전달 및 교환한다.
 
 ## 제너레이터 활용
-보다 쉽게 이터러블을 구현할 수 있다.
+제너레이터는 이터러블이다.
+제너레이터를 사용하면 보다 쉽게 이터러블을 구현할 수 있다.
+```js
+const fibonacci = function () {
+	let [pre, cur] = [0, 1];
+
+	return {
+		[Symbol.iterator]() { return this; },
+		next() {
+			[pre, cur] = [cur, pre + cur];
+			return { value: car}
+		}
+	}
+}
+
+...
+
+const fibonacci = function* () {
+	let [pre, cur] = [0, 1];
+
+	while (true) {
+		[pre, cur] = [cur, pre + cur];
+		yield cur;
+	}
+}
+
+```
+제너레이터는 이터러블을 쉽게 구현하는 것을 염두하고 만들었기 때문에 보다 간결하다.
