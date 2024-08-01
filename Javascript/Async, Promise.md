@@ -1,5 +1,5 @@
 # 비동기
-
+---
 ## 동기 처리와 비동기 처리
 
 동기 처리는 실행 중인 테스크가 종료할 때까지 다음에 실행될 테스크가 대기하는 방식을 말한다. 비동기 처리 방식은 실행 중인 테스크가 있어도 다음에 실행될 테스크가 바로 실행 되는 방식을 말한다.
@@ -57,6 +57,7 @@ const promise = new Promise((rseolve, reject) => {
 ```
 프로미스는 비동기 처리에 대한 상태 와 결과 값을 저장한다.
 `[PromiseState]`에 상태 값 pending, fulfilled, rejected 3가지와 `[PromiseResult]`에 처리 결과 값을 저장한다.
+그리고 fulfilled, rejected 둘 중하나의 상태로 변하면 settled 상태로 표현한다.
 
 ## 프로미스가 필요한 이유
 - 비동기 함수 동작
@@ -96,6 +97,13 @@ promise1
 ### Promise.prototype.then
 두 개의 콜백 함수를 인수로 전달 받는다. 첫 번째는 프로미스가 fullfillled 되면 호출되고 비동기 처리 결과를 인수로 받는다.
 그리고 then메서드는 언제나 프로미스를 반환한다.
+> [!NOTE]
+> thenable
+> thenable은 then이라는 함수를 가진 객체를 말한다.  
+> 프로미스도 then메서드 가지며 이를 만족하기 때문에 thenable에 개념에 포함되며, thenable하다고 표현한다.
+> 이 then 메서드를 가지면 프로미스와 호환되며 체이닝까지 가능하게 된다.
+> 이 thenable은 then메서드를 통해 다른 프로미스와 호환 되어지기 위해 사용되는 인터페이스 개념으로 생각하면 된다.
+> https://promisesaplus.com/#terminology
 
 ### Promise.prototype.catch
 한 개의 콜백함수를 받으며 프로미스가 rejected상태인 경우에만 호출된다.
@@ -128,21 +136,25 @@ promise1
 ```
 
 ## 프로미스의 정적 메서드
-
 ### Promise.all
 배열을 통해 여러개의 프로미스를 전달 받는다. 전달 받은 프로미스를 동시에 병렬로 실행 시킬 수 있다.
-만약 하나라도 rejected되면 즉시 거부되어 에러를 발생하고 나머지 모든 프로미스의 결과도 무시된다.
+만약 하나라도 rejected되면 즉시 거부되어 에러를 발생하고 나머지 모든 프로미스의 결과도 무시된다. 단 나머지 프로미스들은 중단 되지 않고 실행된다.
 다수의 프로미스를 병렬로 실행시킬 때 유용하다.
 
 ### Promise.race
 배열을 통해 여러개의 프로미스를 전달 받는다. 전달 받은 프로미스를 동시에 병렬로 실행 시킬 수 있다.
-Promise.all과 차이점은 단 하나의 가장 빨리 처리된 프로미스의 결과를 반환 한다.
+Promise.all과 차이점은 단 하나의 가장 빨리 처리된 프로미스의 결과를 반환 한다. 이후에 프로미스들의 결과는 fulfilled, rejected상태와 상관없이 무시된다.
 
 ### Promise.allSettled
-
-
-
-
+전달 받은 모든 프로미스가 처리될 때 까지 기다린다. 하나라도 rejected 되더라도 나머지 결과들과 같이 받을 수 있다.
+```js
+[
+	{ status: 'fulfilled', value: '응답' },
+	{ status: 'fulfilled', value: '응답' },
+	{ status: 'rejected', value: 에러 },
+]
+```
+병렬로 실행한 후 하나의 실행 결과가 실패해도 나머지 값이 필요할 때 유용하다.
 
 ## 마이크로 테스크 큐
 마이크로 테스크 큐는 테스크 큐와는 별도로 프로미스 후속 처리 메서드의 콜백 함수가 저장되는 공간이다.
@@ -152,5 +164,32 @@ Promise.all과 차이점은 단 하나의 가장 빨리 처리된 프로미스�
 ## fetch
 fetch는 HTTP 요청을 처리하는 Web API이다.
 fetch함수는 HTTP 응답인 Response를 가지는 **Promise객체를 반환**한다.
+그래서 프로미스가 가지는 특징을 가지며 then메서드를 통해서도 처리가 가능하다.
 
 # Async/Await
+---
+
+
+비동기 처리를 동기 처리처럼 구현할 수 있다. 가독성도 좋아진다.
+
+async/await 구문은 프로미스를 기반으로 동작한다. 
+async는 암묵적으로 반환 값을 resolve하는 프로미스를 반환한다. 프로미스가 아닌 값을 반환 해도 해당 값을 reolve로 감싸 이행된 프로미스로 반환한다.
+```js
+async function foo() {
+	return 1;
+}
+
+async function foo() {
+	return Promise.resolve(1);
+} 
+```
+
+
+then/catch/finally 후속처리 메서드를 사용하지 않아 콜백 함수를 활용할 필요가 없어 동기 처리처럼 프로미스를 사용할 수 있다.
+
+await 키워드는 반드시 async 구문안에 사용해야 한다. 
+
+await 키워드는 프로미스가 settled 상태가 될때까지 대기하다가 프로미스가 처리한 reolve한 결과를 반환한다. 그리고 settled상태가 될때까지 코드를 일시중지 시킨다.
+
+
+try catch 구문과 같이 사용할 수 있고 일반 비동기함수에서 try/catch구문에서의 에러 전파문제 없이 에러처리가 가능해진다.
