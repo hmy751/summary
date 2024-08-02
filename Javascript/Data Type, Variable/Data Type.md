@@ -145,9 +145,48 @@ for (const key in obj) {
 ---
 typeof 연산자는 평가 받을 데이터의 자료형을 문자열로 반환한다.
 
+- 참조형 데이터
 먼저 대부분의 참조형 데이터는 'object'를 반환한다.
 ```js
 typeof [1, 2, 4] === 'object';
 typeof { a: 1 } === 'object';
+typeof new Boolean(true) === 'object';
+typeof new Date() === 'object';
+```
 
+null은 원시형이지만  'object'를 반환한다.
+```js
+typeof null === 'object';
+```
+
+함수는 function을 반환한다.
+```js
+typeof function () {} === 'function'
+typeof class C {} === 'function'
+typeof Math.sin === 'function'
+```
+
+배열을 확인할 때 typeof값은 object를 반환한다. 만약 배열임을 확인하고 싶다면 Array.isArray메서드로 확인이 가능하다.
+```js
+Array.isArray([1, 2, 3]) // true
+```
+
+- 원시형 데이터
+이외의 데이터들은 대부분 원시형으로 자신의 데이터 타입을 반환한다.
+```js
+typeof "" === 'string';
+
+typeof 1 === 'number';
+typeof NaN === 'number';
+typeof Infinity === 'number';
+
+typeof 42n === 'bigint';
+
+typeof true === 'boolean';
+
+typeof Symbol() === 'symbol';
+typeof Symbol('foo') === 'symbol';
+typeof Symbol.iterator === 'symbol';
+
+typeof undefined === 'undefined';
 ```
