@@ -23,7 +23,6 @@ range[Symbol.iterator] = function () {
 		current: this.from,
 		last: this.to,
 		next() {
-		
 			if (this.current <= this.last) {
 				return { done: fasle, value: this.current++ };
 			}
@@ -179,7 +178,8 @@ const [f1, f2, f3] = fibonacci(); // 1, 2, 3
 
 # Generator
 ---
-제너레이터는 function* 키워드를 이용하여 선언할 수 있고 하나 이상의 yield표현식을 포함한다.
+제너레이터는 function* 키워드를 이용하여 선언할 수 있고 하나 이상의 yield표현식을 포함하는 객체 입니다.
+generator 함수로 부터 반환 됩니다.
 제너레이터 함수는 호출하게 되면 제너레이터 함수의 코드 블록이 실행되는 것이 아니라, 제너레이터 객체를 생성하고 반환한다. 이 제너레이터 객체는 이터러블, 이터레이터 모두를 만족한다.
 그래서 제너레이터 객체도 next메서드를 가지며 next메서드를 통해서 순회가 가능하며 이터레이터 리절트 객체인 { value: any, done: boolean }을 반환한다.
 ```js

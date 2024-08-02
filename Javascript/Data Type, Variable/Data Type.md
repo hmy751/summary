@@ -58,8 +58,8 @@ const obj = {
 obj[Symbol('key')]; // undefined
 ```
 
-- 사용처
-객체에서 충돌이 되지않는 유일한 프로퍼티를 만들 때 유용하다.
+#### 사용하는 경우
+- 객체에서 충돌이 되지않는 유일한 프로퍼티를 만들 때 유용하다.
 ```js
 const obj = {
 	[Symbol('key')]: 'value1',
@@ -80,7 +80,13 @@ const obj2 = {
 ```
 key는 같은 값으로 인식하여 중복된 키에대해 덮어쓴다.
 
-일시적으로 동적 프로퍼티를 추가할 때 사용가능하다.
+- 프로퍼티를 보호하고자 할때 사용된다.`
+```js
+
+```
+
+https://pozafly.github.io/javascript/symbol/
+주로 필요한 곳은 
 ```js
 Array.prototype[Symbol.for('sum')] = function () {
 	...
