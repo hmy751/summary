@@ -172,6 +172,8 @@ rect.move(1, 1);
 ```
 이렇게 하면 Rectangle은 Shape.prototype을 상속받게 된다. 다만 consturctor를 따로 명시하여 지정해줘야 연결이 끊기지 않게 된다.
 
+그래서 상속 관계를 알아보기 위해서는 constructor 보다 instanceof를 사용하는게 더 낫다.
+
 `__proto__`를 이용한 방법도 있지만 해당 프로퍼티는 사용자체를 권장하지는 않아 Object.create로 상속하는 방법이 더 낫다.
 
 ## 정적 메서드(스태틱 메서드)\
@@ -186,15 +188,26 @@ rect.move(1, 1);
 ## 연산자
 ## instanceof
 instanceof메서드는 생성자 함수를 찾는 것이 아니라 생성자 함수의 prototype에 바인딩된 객체가 프로토타입 체인 상에 존재하는지 확인한다.
+그래서 상속 관계를 확인하기 위해 constructor 프로퍼티를 통해 확인하는 것 보다 instanceof를 사용하는게 더 낫다.
 ```js
 function Person(name) {
 	this.name = name;
 }
 
-const me = new Person('Lee');
+const me = new Person("Lee");
+const parent = {};
 
-console.log(me instanceof Person); // true
-console.log(me instanceof Object); // true
+Object.setPrototypeOf(me, parent);
+
+Person.prototype = parent;
+
+console.log(me.constructor === Person); // true
+console.log(me instanceof Person); // false
+
+Person.constructor = Array;
+
+console.log("Person constructor is Array =>", Person.constructor === Array); // true
+console.log("Person instanceof Array is =>", Person instanceof Array); // false
 ```
 
 ### 프로퍼티 존재 확인
