@@ -80,13 +80,9 @@ const obj2 = {
 ```
 key는 같은 값으로 인식하여 중복된 키에대해 덮어쓴다.
 
-- 프로퍼티를 보호하고자 할때 사용된다.`
-```js
-
-```
-
-https://pozafly.github.io/javascript/symbol/
-주로 필요한 곳은 
+- 프로퍼티를 보호하고자 할때 사용된다.
+서드파티의 객체 메서드나 빌트인 객체의 프로토타입 메서드 등을 임시로 변경하고자 할때 해당 메서드를 변경하게 되면 다른 곳에 영향을 줄 가능성이 있다.
+이를 방지하기 위해 심벌을 이용하면 해당 이름을 활용하여 구분하면서 유일한 프로퍼티를 생성하여 충돌을 피하며 기존 프로퍼티 메서드도 영향을 주지 않을 수 있다.
 ```js
 Array.prototype[Symbol.for('sum')] = function () {
 	...
@@ -94,9 +90,25 @@ Array.prototype[Symbol.for('sum')] = function () {
 
 [1, 2][Symbol.for('sum')]();
 ```
-기존에 sum메서드의 내용을 건드리지 않고 변경할 수 있다.
 
-- `Symbol.for/Symbol.keyFor`
+https://pozafly.github.io/javascript/symbol/
+
+- 유일한 상수 값을 사용하려고 할때
+```js
+const COLOR_BLUE = 'blue';
+
+const MOOD_BLUE = 'blue';
+```
+두 개의 상수는 다르지만 같은 값을 가진다.
+이 때 구분되지 않는데 심벌을 통해 구분할 수 있다.
+
+```js
+const COLOR_BLUE = Symbol();
+const MOOD_BLUE = Symbol();
+
+```
+
+#### `Symbol.for/Symbol.keyFor`
 Symbol메서드는 호출될 때마다 유일한 데이터를 생성한다. 실제로는 자바스크립트 엔진이 심벌 값 저장소인 전역 심벌 레지스트리에서 심벌 값을 검색할 수 있는 키를 지정하지 못해서다.
 Symbol.for 메서드를 사용하면 전역 심벌 레지스트리에 검색을 통해 공유가 가능하다.
 ```js
@@ -113,7 +125,7 @@ const symbol = Symbol.for('key');
 Symbol.keyFor(symbol); // key
 ```
 
-- 심벌과 프로퍼티
+#### 심벌과 프로퍼티
 심벌 값으로 프로퍼티를 생성하고 접근하여 사용하려면 Symbol.for메서드를 활용하면 된다.
 ```js
 const obj = {
@@ -137,7 +149,7 @@ for (const key in obj) {
 하지만 getOwnPropertySymbols를 통해서 조회는 가능하다.
 
 
-- Well-known Symbol
+#### Well-known Symbol
 자바스크립트가 기본 제공하는 빌트인 심벌 값이다. 빌트인 심벌 값은 함수의 프로퍼티에 할당 되어 잇다.
 기본 제공하는 빌트인 심벌 값을 Well-known Symbol이라고 한다. ^676c3f
 
