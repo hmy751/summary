@@ -79,3 +79,75 @@ class Person {}
 
 ## 메서드
 ### constructor
+constructor메서드는 클래스의 인스턴스를 생성하고 초기화 하는 특수한 메서드다. 일반적으로 함수의 prototype객체의 constructor 프로퍼티와는 다른 개념이다.
+클래스를 호출하더라도 prototype객체와 constructor프로퍼티가 존재는 하지만 클래스 내부에 사용하는 constructor메서드는 특수한 개념으로 클래스의 프로퍼티 자체에 존재하지 않으며, 함수가 생성되면 부여되는 constrctor 프로퍼티와는 역할이 다르다.
+인스턴스에 부여할 프로퍼티 생성 및 초기화에 관여한다.
+
+### 프로토타입
+클래스 자체에 정의한 메서드는 기본적으로 프로토타입 메서드가 된다.
+```js
+class Person {
+	sayHi() {
+	}
+}
+
+console.log(new Person());
+```
+![[Javascript/Class.excalidraw.md#^group=Q29TVmAmSBOt5k58r3UHy]]
+
+클래스는 생성자 함수와 같은 방식으로 인스턴스를 생상한다.
+
+### 정적 메서드
+정적 메서드는 인스턴스가 직접 접근할 수 없는 생성자 함수의 메서드이다. 인스턴스가 접근하여 예기치 못한 오류를 발생하고자 활용한다.
+[[Prototype#^972921]]
+클래스도 정적 메서드를 가지는데 static 키워드를 붙여서 구현한다.
+```js
+Person.sayHello = function () {
+	console.log('Hello');
+};
+
+static sayHell() {
+	console.log('Hello');
+}
+```
+
+클래스에서 직접 스태틱 메서드를 활용할 수 있다.
+```js
+Person.sayHi();
+```
+
+정적 메서드는 인스턴스와 상관 없는 전역 환경에서 사용할 유틸리티 메서드를 사용하는데 활용될 수 있다. 
+```js
+Math.max(1, 2, 3);
+Object.is({}, {});
+```
+이렇게 활용하면 생성자 함수를 네임스페이스로 하고 프로퍼티 충돌 가능성을 줄여주고, 관련 함수들을 구조화할 수 있어 좋다.
+이렇게 하면 전역 함수를 정의하지 않고도 활용이 가능하다.
+
+## 프로퍼티
+### 접근자 프로퍼티(getter, setter)
+getter, setter는 접근자 프로퍼티로 자체적으로는 값을 가지고 있지 않다. 다른 데이터 프로퍼티의 값을 읽거나 저장할 때 사용하는 접근자 함수로 구성된 프로퍼티다.
+일반 객체 뿐만 아니라 클래스에서도 사용이 가능하다.
+```js
+class Person {
+	constructor(firstName, lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	get fullName() {
+		return `${this.firstName}${this.lastName}`;
+	}
+
+	set fullName(name) {
+		[this.firstName, this.lastName] = name.split(' ');
+	}
+}
+
+cosnt me = new Person();
+
+me.fullName = '명연 함'
+console.log(me.fullName); // 함명연
+```
+접근자 프로퍼티를 사용하면 호출하는 것이 아니라 프로퍼티처럼 참조 형식으로 사용하며 내부적으로 getter, setter가 호출 되는 형태이다.
+그래서 내부 구현을 숨길 수 있어 외부에서 객체의 상태를 임의로 변경하거나 접근하는 것을 막을 수 있다.
