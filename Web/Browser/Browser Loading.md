@@ -162,3 +162,15 @@ https://developer.mozilla.org/en-US/docs/Learn/Performance/JavaScript
 
 https://www.erwinhofman.com/blog/parsing-and-rendering-process-simplified/
 https://ui.toast.com/fe-guide/ko_PERFORMANCE
+
+# 브라우저와 네트워크
+---
+## 브라우저의 로딩 과정 
+네크워크 관점에서 브라우저의 로딩과정은 
+크게 URL 검증 과정, https 검증, DNS 연결, 해당 서버와 브라우저 연결 tcp, HTTP/HTTPS 요청과 응답
+
+네트워크 관점에서 보면 
+먼저 URL을 입력하면 해당 url주소 중 도메인 네임 부분을 DNS서버에서 검색한다. DNS 서버에서 해당 도메인 네임에 해당하는 IP 주소를 찾아 사용자가 입력한 URL 정보와 함께 전달한다.
+브라우저는 HTTP 프로토콜을 사용하여 요청 메시지를 생성하고 요청 메시지는 TCP/IP 프로토콜을 사용해서 서버로 전송된다.
+서버는 response 메시지를 생성하여 다시 브라우저에게 데이터를 전송한다
+브라우저는 reponse를 받아 파싱하여 화면에 렌더링한다.
