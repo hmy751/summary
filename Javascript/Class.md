@@ -153,3 +153,61 @@ console.log(me.fullName); // 함명연
 그래서 내부 구현을 숨길 수 있어 외부에서 객체의 상태를 임의로 변경하거나 접근하는 것을 막을 수 있다.
 
 ## 클래스 상속
+### 클래스 상속과 생성자 함수 상속의 차이
+클래스 상속은 기존 클래스를 상속받아 새로운 클래스를 확장한다.
+프토타입체인과 차이점은 프로토타입은 프로토타입만을 연결시켜 상속 받는데 클래스는 프로토타입 뿐만 아니라 클래스 자체도 상속을 구현한다.
+![[Javascript/Class.excalidraw.md#^group=YlBVqhUm0RJBoc9U9-95q|1200]]
+또 클래스 상속은 코드 재사용 관점에서 유용하다.
+
+### 키워드
+#### super
+super를 호출하면 수퍼 클래스(super class)의 constructor를 호출한다.
+수퍼 클래스의 프로퍼티를 그대로 갖는 서브 클래스를 가질수 있다.
+constructor를 생략하면 암묵적으로 super호출을 통해 서브 클래스로 프로퍼티가 전달된다.
+만약 constructor를 호출하면 반드시 내부에 super를 호출해야 한다.
+```js
+class Derived extends Base {
+	constructor(a, b, c) {
+		super(a, b);
+		this.c = c;
+	}
+}
+
+class Derived extends Base {
+	constructor(a, b, c) {
+		// ReferenceERror, constructor를 호출하면
+		// 반드시 super를 호출해야 한다.
+		this.c = c;
+	}
+}
+
+```
+
+반드시 super를 호출하고 프로퍼티를 선언해야 한다.
+```js
+class Derived extends Base {
+	constructor(a, b, c) {
+		this.c = c;
+		super();
+	}
+}
+```
+
+super 참조를 통해서 수퍼클래스의 메서드를 참조할 수 있다.
+```js
+class Base {
+	constructor(name) {
+		this.name = name;
+	}
+
+	sayHi() {
+		return `Hi ${this.name}`;
+	}
+}
+
+class Derived extends Base {
+	sayHi() {
+		return `${super.sayHi()}`;
+	}
+}
+```
