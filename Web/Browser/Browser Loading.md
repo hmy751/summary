@@ -165,17 +165,20 @@ https://ui.toast.com/fe-guide/ko_PERFORMANCE
 
 # 브라우저와 네트워크
 ---
-## 브라우저의 로딩 과정 
+## 브라우저의 요청 과정 
 네크워크 관점에서 브라우저의 로딩과정은 
 크게 URL 검증 과정, https 검증, DNS 연결, 해당 서버와 브라우저 연결 tcp, HTTP/HTTPS 요청과 응답
 
 네트워크 관점에서 보면 
+URL을 입력하면 브라우저가 하는 것 아니라 OS에 의뢰를 한다.
 먼저 URL을 입력하면 해당 url주소 중 도메인 네임 부분을 DNS서버에서 검색한다. DNS 서버에서 해당 도메인 네임에 해당하는 IP 주소를 찾아 사용자가 입력한 URL 정보와 함께 전달한다.
 CDN을 참조한다.
 브라우저는 HTTP 프로토콜을 사용하여 요청 메시지를 생성하고 요청 메시지는 TCP/IP 프로토콜을 사용해서 서버로 전송된다.
+https인 경우 TLS 힌드 셰이크 추가 과정이 있다. SSL
 서버는 response 메시지를 생성하여 다시 브라우저에게 데이터를 전송한다
 브라우저는 reponse를 받아 파싱하여 화면에 렌더링한다.
 
+(네트워크 원리 책 참고)
 DNS의 이름 해석, ARP 주소 해석
 URL 입력
 TCP/IP에 필요한  IP 주소 DNS 서버에서 웹서버의 IP 주소를 해석
@@ -184,3 +187,4 @@ TCP/IP에 필요한  IP 주소 DNS 서버에서 웹서버의 IP 주소를 해석
 웹 서버의 IP주소를 알면 그 주소를 통해 웹 브라우저와 웹 서버의 TCP커넥션을 맺는다
 TCP커넥션이 연결되면 HTTP요청과 응답을 주고 받는다
 
+https://aws.amazon.com/ko/blogs/korea/what-happens-when-you-type-a-url-into-your-browser/
