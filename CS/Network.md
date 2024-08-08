@@ -3,6 +3,9 @@
 ---
 ## HTTP/HTTPS
 
+^21f9ea
+- TLS(Transport Layer Security)
+TLS는 전송 계층 보안으로 인터넷을 통한 통신을 보호하는 암호화 프로토콜이다.
 
 # TCP/IP 5계층
 ---
@@ -33,6 +36,9 @@ IP 헤더의 형식은 IPv4라고 해서
 
 - 3 way TLS 핸드 쉐이크
 ### DNS
+
+^7823ff
+
 DNS(Domain Name System)는 전화 번호부 처럼 인터
 
 

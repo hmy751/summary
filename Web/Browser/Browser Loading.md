@@ -191,3 +191,32 @@ TCP/IP에 필요한  IP 주소 DNS 서버에서 웹서버의 IP 주소를 해석
 TCP커넥션이 연결되면 HTTP요청과 응답을 주고 받는다
 
 https://aws.amazon.com/ko/blogs/korea/what-happens-when-you-type-a-url-into-your-browser/
+
+네트워크 관점으로 브라우저의 요청 과정은 다음과 같다. 
+URL을 입력하고 엔터를 치는 시점부터 시작한다.
+먼저 크게 다음과 같은 과정을 거친다.
+- 입력한 URL 해석
+- URL을 통한 서버의 IP주소 확인
+- 확인된 주소에 해당하는 서버에 연결 요청
+- 서버에 연결 후 웹 페이지 데이터 요청 및 응답
+- 브라우저 렌더링
+
+### URL 해석
+`https://d2.naver.com/helloworld/59361` 예시의 URL을 입력하고 엔터를 치면 URL을 해석하기 시작한다.
+![[Web/Browser/Browser.excalidraw.md#^group=cIjPuBTG|1200]]
+- Protocol
+`https://`는 통신 프로토콜로 HTTPS 프로토콜을 이용한다는 걸 알 수 있다. 
+HTTPS는 TLS(Transport Layer Security, 전송 계층 보안)을 이용하여 브라우저가 서버에 연결하도록 지시한다.
+[[Network#^21f9ea]]
+
+- Domain
+`d2.naver.com`은 웹 사이트의 도메인 이름이다. 도메인은 숫자로 구성돼 구별 및 기억하기 어려운 IP주소를 기억하기 쉽게 변경한 이름을 의미한다.
+도메인도 종류를 나눌 수 있다.
+	- TLD(Top-Level Domain, 최상위 도메인)
+	도메인 레벨 중 가장 높은 단계에 있다. 루트 도메인 
+- dj
+	dfsfdfdf
+	fdsfdf
+	- 
+
+[[Network#^7823ff]]
