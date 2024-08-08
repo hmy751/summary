@@ -39,7 +39,8 @@ IP 헤더의 형식은 IPv4라고 해서
 
 ^7823ff
 
-DNS(Domain Name System)는 전화 번호부 처럼 인터
+DNS(Domain Name System)는 전화 번호부 처럼 고유한 IP주소를 도메인 이름으로 저장하는 시스템이다.
+DNS 룩업
 
 
 ### 프록시 서버
