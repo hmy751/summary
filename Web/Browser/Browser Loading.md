@@ -171,8 +171,10 @@ https://ui.toast.com/fe-guide/ko_PERFORMANCE
 
 네트워크 관점에서 보면 
 URL을 입력하면 브라우저가 하는 것 아니라 OS에 의뢰를 한다.
-먼저 URL을 입력하면 해당 url주소 중 도메인 네임 부분을 DNS서버에서 검색한다. DNS 서버에서 해당 도메인 네임에 해당하는 IP 주소를 찾아 사용자가 입력한 URL 정보와 함께 전달한다.
-CDN을 참조한다.
+먼저 URL을 입력하면 해당 url주소 중 도메인 네임 부분을 DNS서버에서 검색한다. 
+DNS 서버에서 해당 도메인 네임에 해당하는 IP 주소를 찾아 사용자가 입력한 URL 정보와 함께 전달한다.
+https://aws.amazon.com/ko/route53/what-is-dns/?nc1=h_ls
+그 다음 상황에 따라 CDN을 참조한다.
 브라우저는 HTTP 프로토콜을 사용하여 요청 메시지를 생성하고 요청 메시지는 TCP/IP 프로토콜을 사용해서 서버로 전송된다.
 https인 경우 TLS 힌드 셰이크 추가 과정이 있다. SSL
 서버는 response 메시지를 생성하여 다시 브라우저에게 데이터를 전송한다
@@ -180,6 +182,7 @@ https인 경우 TLS 힌드 셰이크 추가 과정이 있다. SSL
 
 (네트워크 원리 책 참고)
 DNS의 이름 해석, ARP 주소 해석
+
 URL 입력
 TCP/IP에 필요한  IP 주소 DNS 서버에서 웹서버의 IP 주소를 해석
 이때 ARP도 실행해서 MAC 주소도 구한다.
