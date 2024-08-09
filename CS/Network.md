@@ -1,8 +1,7 @@
-
 # HTTP
 ---
 ## HTTP/HTTPS
-HTTP는 
+HTTP는 통신 프로토콜로 
 
 ^21f9ea
 - TLS(Transport Layer Security)
@@ -46,3 +45,9 @@ ARP
 
 
 ### 프록시 서버
+
+# 네트워크 보안
+---
+공개키 방식
+
+대칭키 방식
