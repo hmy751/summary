@@ -79,47 +79,67 @@ https://inpa.tistory.com/entry/WEB-%F0%9F%8C%90-HTTP-20-%ED%86%B5%EC%8B%A0-%EA%B
 TCP의 HOLB 현상을 해결했다.
 
 ## CORS
+CORS(Cross-Origin Resource Sharing)은 Origin이 다른 출처의 브라우저로부터 서버에 자원을 요청하는 것을 허용하도록 허가해주는 헤더 기반 메커니즘이다.
+여기서 origin은 URL중 프로토콜, 호스트명, 포트번호를 말한다.
+요청 헤더에 origin을 확인하고 Access-Control-Allow-Origin의 설정을 비교하여 검증한다.
 
 
-# TCP/IP 5계층
+# TCP/IP 4계층
 ---
-## 물리 계층
-- MAC 주소
-- LAN 카드
-- 케이블
+TCP/IP 4계층은 네트워크에 사용되는 프로토콜을 네개의 모델로 나누어 추상화 한 개념이다.
+## 애플리케이션 계층
+애플리케이션 게층은 응용프로그램이 사용되는 계층으로 실질적으로 사람들에게 제공하는 계층이다.
+HTTP, DNS, FTP, TFTP, SNMP등이 있다.
 
-## 네트워크 계층
-### IP
-IP(Internet Protocol)는 엔드투엔드 통신의 역할을 맡으며 PC간의 통신을 담당한다. 
-IP데이터는 패킷으로 부르며 구성은 IP헤더와 TCP세그먼트의 조합으로 구성되어 있다.
-TCP세그먼트에 IP헤더를 붙이면 IP패킷이 된다.
-
-- IP 헤더
-IP 헤더의 형식은 IPv4라고 해서 
-https://fastercapital.com/ko/content/IP-%EC%A3%BC%EC%86%8C--IP%EC%97%90%EC%84%9C-ISP%EA%B9%8C%EC%A7%80--%EC%9D%B8%ED%84%B0%EB%84%B7-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EC%9D%98-%EA%B8%B0%EB%B3%B8-%EC%9D%B4%ED%95%B4.html
-https://study-recording.tistory.com/7
-### Encapsulation, Decapsulation
-
-### 라우팅 프로토콜
-## 트랜스포트 계층
-
-- 트랜스포트 계층
-- TCP,IP
-- UDP
-
-## 어플리케이션 계층
-
-- 3 way TLS 핸드 쉐이크
 ### DNS
 
 ^7823ff
-
 DNS(Domain Name System)는 전화 번호부 처럼 고유한 IP주소를 도메인 이름으로 저장하는 시스템이다.
 DNS 룩업
 ARP
 https://ko.wix.com/blog/post/domain-name-system-dns
 https://aws.amazon.com/ko/route53/what-is-dns/?nc1=h_ls
-### 프록시 서버
+## 트랜스포트 계층
+전송 계층이라고도 하며 애플리케이션과 인터넷 계층 사이의 데이터가 전달 될때 중계역할을 한다.
+대표적으로는 TCP, UDP가 있다
+TCP는 연결지향 프로토콜을 사용해서 연결하며 신뢰성을 확보해준다.
+UDP는 단순 데이터그램 패킷 교환방식을 사용하며 데이터만 주고 받는다.
+TCP는 세그먼트라고 부른다.
+- TCP 헤더
+TCP 헤더에는 시퀀스, ACK 번호가 존재하며 ACK번호는 데이터가 바르게 수신됐음을 의미하는 번호다.
+
+## 네트워크 계층
+네트워크 사이에서 네트워크 패킷을 IP주소로 지정된 목적지로 전송하기 위해 사용되는 계층이다. 여기에는 IP, ARP, ICMP등이 있다.
+패킷을 수신할 상대의 주소를 지정하여 데이터를 전달한다.
+
+네트워크끼리 연결하고 데이터를 전송하는 장치인 라우터가 있고 이 라우터에 의한 전송을 라우팅이라고 한다. 
+### IP
+IP(Internet Protocol)는 엔드투엔드 통신의 역할을 맡으며 PC간의 통신을 담당한다. 
+IP데이터는 패킷으로 부르며 구성은 IP헤더와 TCP세그먼트의 조합으로 구성되어 있다.
+TCP세그먼트에 IP헤더를 붙이면 IP패킷이 된다.
+- IP 주소
+IP에서 엔드투엔드 즉 출발지에서 목적지까지 전달하려면 주소가 제일 중요하다. IP주소는 호스트의 인터페이스를 식별하는 주소다.
+
+- IP 헤더
+IP 헤더의 형식은 IPv4라고 해서 통신을 위한 정보를 가지는데 제일 중요한 정보는 출발지, 목적지의 IP주소를 가지고 이를 통해 통신을 처리한다.
+https://fastercapital.com/ko/content/IP-%EC%A3%BC%EC%86%8C--IP%EC%97%90%EC%84%9C-ISP%EA%B9%8C%EC%A7%80--%EC%9D%B8%ED%84%B0%EB%84%B7-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C%EC%9D%98-%EA%B8%B0%EB%B3%B8-%EC%9D%B4%ED%95%B4.html
+https://study-recording.tistory.com/7
+
+- ARP
+ARP는 인터페이스의 고유한 MAC주소와 IP주소를 대응하는 역할을 한다.
+### Encapsulation, Decapsulation
+
+### 라우팅 프로토콜
+## 물리 계층
+
+- MAC 주소
+- LAN 카드
+- 케이블
+
+
+
+
+
 
 # 네트워크 보안
 ---
