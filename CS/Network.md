@@ -83,7 +83,6 @@ CORS(Cross-Origin Resource Sharing)은 Origin이 다른 출처의 브라우저�
 여기서 origin은 URL중 프로토콜, 호스트명, 포트번호를 말한다.
 요청 헤더에 origin을 확인하고 Access-Control-Allow-Origin의 설정을 비교하여 검증한다.
 
-
 # TCP/IP 4계층
 ---
 TCP/IP 4계층은 네트워크에 사용되는 프로토콜을 네개의 모델로 나누어 추상화 한 개념이다.
