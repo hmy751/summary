@@ -167,6 +167,22 @@ Promise.all과 차이점은 단 하나의 가장 빨리 처리된 프로미스�
 fetch는 HTTP 요청을 처리하는 Web API이다.
 fetch함수는 HTTP 응답인 Response를 가지는 **Promise객체를 반환**한다.
 그래서 프로미스가 가지는 특징을 가지며 then메서드를 통해서도 처리가 가능하다.
+ 
+ fetch는 서버가 헤더를 포함한 응답을 하는 순간 이행되는데, 즉 HTTP자체에 대한 에러의 응답도 이행을 한다는 뜻이다. 그래서 네트워크의 에러는 catch로 넘어가지만 HTTP에 대한 에러 4xx, 5xx는 넘어가지 않는다. 따라서 response.ok의 상태를 가지고 HTTP요청의 에러를 처리할 수 있다.
+ ```js
+ async function request() {
+	 try {
+		 const response = await fetch('url');
+		 if (!response.ok) {
+			 throw new Error('Http에 대한 에러');
+		 }
+	 } catch (err) {
+		 console.error('네트워크의 에러', err);
+	 }
+ }
+```
+
+https://developer.mozilla.org/ko/docs/Web/API/Fetch_API#%EA%B0%9C%EB%85%90%EA%B3%BC_%EC%82%AC%EC%9A%A9%EB%B2%95
 
 # Async/Await
 ---
