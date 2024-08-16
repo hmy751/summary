@@ -32,6 +32,9 @@ heapify는 힙 구조를 유지하도록 하는 작업이다.
 - 현재 노드에서 자식 노드들과 비교하여 우선순위 조건에 따라서 노드를 교환한다. 
 - 교환한 노드를 다시 현재 노드 기준으로하여 재귀적으로 작업을 수행한다.
 
+https://github.com/hmy75d/data-structure-code/blob/main/src/dataStructure/heap.ts
+
+
 # Priority Queue
 ---
 우선순위 큐(Priority Queue)는 우선순위를 가진 항목들을 저장하는 큐로 순서가 아닌 우선순위를 기준으로 먼저 나가는 자료구조이다.
