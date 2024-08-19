@@ -79,10 +79,12 @@ https://inpa.tistory.com/entry/WEB-%F0%9F%8C%90-HTTP-20-%ED%86%B5%EC%8B%A0-%EA%B
 TCP의 HOLB 현상을 해결했다.
 
 ## CORS
-CORS(Cross-Origin Resource Sharing)은 Origin이 다른 출처의 브라우저로부터 서버에 자원을 요청하는 것을 허용하도록 허가해주는 헤더 기반 메커니즘이다.
+CORS(Cross-Origin Resource Sharing)는 브라우저가 자신의 출처가 아닌 다른 출처로 자원을 서버에 요청하는 상황에서, 서버가 요청의 허가를 결정하는 HTTP 헤더 기반 메커니즘이다.
+
+
 여기서 origin은 URL중 프로토콜, 호스트명, 포트번호를 말한다.
 요청 헤더에 origin을 확인하고 Access-Control-Allow-Origin의 설정을 비교하여 검증한다.
-
+https://developer.mozilla.org/ko/docs/Web/HTTP/CORS#%EC%A0%91%EA%B7%BC_%EC%A0%9C%EC%96%B4_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4_%EC%98%88%EC%A0%9C
 # TCP/IP 4계층
 ---
 TCP/IP 4계층은 네트워크에 사용되는 프로토콜을 네개의 모델로 나누어 추상화 한 개념이다.
