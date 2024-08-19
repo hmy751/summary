@@ -58,6 +58,13 @@ https://github.com/hmy75d/data-structure-code/blob/main/src/Algorithm/mergeSort.
 단점은 이미 정렬된 데이터에 대해서 퀵 정렬의 불균형 분할로 오히려 시간이 더 많이 걸릴수 있다.
 
 ## 시간 복잡도
+시간 복잡도 최악의 경우는 피벗이 배열의 최소값이나 최대값을 반복적으로 선택하여 배열이 불균형하게 나누어지는 경우이다. 이때 재귀 호출의 깊이는 N에 가까워지고, 각 호출에서 배열의 모든 요소N의 시간을 고려하면 시간복잡도가 O(N2)이 된다.
+이외 최선 및 평균적으로는 배열이 매번 절반에 가깝게 나누어진다고 가정하면 재귀 호출의 깊이는 logN이고 각 호출에서 배열의 모든 요소N의 시간을 고려하면 전체 시간 복잡도는 O(NlogN)으로 된다.
 
+공간 복잡도는 최악의 경우 in-place로 교환할 경우 메모리는 추가하지 않지만 재귀 호출을 하고 N의 깊이 만큼 호출하여 O(N)이된다.
+이외 최선 및 평균적으로는 O(logN)이 된다.
+
+시간 복잡도 - O(NlogN) 평균, O(N2) 최악의 경우
+공간 복잡도 - O(logN) 평균, O(N) 최악의 경우
 
 https://github.com/hmy75d/data-structure-code/blob/main/src/Algorithm/quickSort.ts
