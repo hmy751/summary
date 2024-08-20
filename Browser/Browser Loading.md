@@ -176,7 +176,7 @@ https://ui.toast.com/fe-guide/ko_PERFORMANCE
 ### URL 해석
 URL(Uniform Resource Locator)은 웹에서 고유한 리소스의 주소다.
 `https://d2.naver.com/helloworld/59361` 예시로 URL을 입력하고 엔터를 치면 URL을 해석하기 시작한다. URL은 
-![[Web/Browser/Browser.excalidraw.md#^group=cIjPuBTG|1200]]
+![[Browser.excalidraw#^group=cIjPuBTG|1200]]
 - Protocol
 `https://`는 통신 프로토콜로 여기서는 HTTPS 프로토콜을 이용한다는 걸 알 수 있다. 
 HTTPS는 HTTP에 보안을 강화한 형태로 추가적으로 TLS(Transport Layer Security, 전송 계층 보안)과정을 통해 브라우저가 서버에 연결하도록 지시한다.
