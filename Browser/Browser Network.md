@@ -104,6 +104,8 @@ HTTP캐시에는 크게 개인 캐시, 공유 캐시 두 가지가 있다.
 Cache-contol: private
 ```
 
+
+
 #### 공유 캐시(Shared Cache)
 공유 캐시는 클라이언트와 서버 사이에 위치하는 캐시로 사용자간에 공유될 수 있다. 공유 캐시에는 프록시 캐시와 관리형 캐시가 있다.
 
@@ -140,9 +142,46 @@ Vary를 이용해서 같은 URL로 이루어진 하나의 엔트리를 여러개
 Vary: Accept-Language
 ```
 
+
+### 캐싱 과정
+먼저 HTTP의 초기 요청은 캐시가 없는 상태로 요청을 보낸다. 그 후에 응답을 
+
+
 ### Cache-control
 Cache-Control속성은 헤더 속성으로 캐시의 생명주기를 결정한다.
+먼저 주기를 기준으로 형성
+그 뒤에 revalidate요처을 하는데 Etag값을 비교하여 검증하고 활용한다.
 
 ### 헤더 캐싱 속성
 
-Cache-Control, max- age, expires, ETag, Last-Modified, 
+Cache-Control 값에는 max-age, nocache, no-store, private, public
+Etag
+Last-Modified
+expires
+
+요청헤더
+If-Modified_since
+If-None-Match
+
+stale-while-revalidate
+
+### 유효성, 검증
+
+
+# Web Storage
+---
+종류
+
+생명 주기
+
+
+
+# User Auth
+---
+쿠키
+
+세션
+
+토큰
+
+JWT
