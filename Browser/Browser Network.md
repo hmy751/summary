@@ -330,7 +330,8 @@ https://toss.tech/article/smart-web-service-cache
 ---
 ## Cookie
 쿠키는 서버가 브라우저에 전송하는 작은 데이터 조각으로 브라우저가 받아 서버에 요청을 할 때 함께 전송되는 데이터다.
-브라우저를 기준으로 판단할 때 사용된다. 주로 사용자의 상태를 저장하는데 이용된다.
+
+동일 브라우저에 대한 판단할 때 사용된다. 주로 사용자의 상태를 저장하는데 이용된다.
 
 3가지 목적으로 사용된다.
 세션 관리
@@ -340,15 +341,46 @@ https://toss.tech/article/smart-web-service-cache
 트래킹
 	사용자 행동에 대한 데이터 분석
 
-요즘에는 쿠키보다 웹 스토리지 API인 localStorage, sessionStorage등을 더 많이 사용
+요즘에는 쿠키보다 웹 스토리지 API인 localStorage, sessionStorage등을 더 많이 권장한다. 쿠키는 모든 요청마다 함께 전송되어 성능이 떨어질 우려가 있다.
+
+### 헤더 설정
+Set-Cookie를 통해 서버가 클라이언트에게 저장을 요구한다. 
+클라이언트는 해당 정보를 쿠키에 저장하고 이후 모든 전송에 Cookie헤더에 담아 전송하게 된다.
+HTTP/1.0 200 OK
+Content-type: text/html
+Set-Cookie: yummy_cookie=choco
+Set-Cookie: tasty_cookie=strawberry
 
 
+### 라이프 타임
+쿠키의 라이프 타임은 두가지로 나뉜다 
+세션 쿠키와 영속 쿠키로
 
-## Local Storage
+세션 쿠키는 Expires, Max-Age속성이 없는 쿠키며  브라우저의 세션을 기준으로 삭제된다.
+영속적인 쿠키는 Expires, Max-Age속성이 명시된 쿠키며 만료 후 쿠키가 삭제 된다.
+Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT;
+### 보안
+쿠키를 보호하는 방법에는 Secure, HttpOnly등이 있다.
+Secure는 HTTPS 프로토콜에서만 전송되도록 하는 속성이다. 
+HttpOnly는 XSS(Cross-site 스크립팅) 공격을 방지하기 위해 사용되며 해당 쿠키는 자바스크립트의 Document.cookie API로 접근하지 못하게 되며 서버에 전송하기만 된다.
+
+SameSite 쿠키는 크로스 출처에 대해 전송을 막는 속성이다 CSRF에 대한 보호 할 수 있다. 아직은 실험단계다.
+
+### 쿠키의 스코프
+쿠키의 스코프는 Domain 및 Path 속성으로 범위를 정의한다.
+
+도메인을 지정하지 않는 경우 서브 도메인은 포함되지 않으며 명시되면 서브 도메인들이 항상 포함된다.
+
+Path는 Cookie헤더를 전송하기 하기 위해 요청되는 URL 경로다. 서브 디렉토리까지 포함된다.
+
+## Local Storage, Session Storage
+로컬 스토리지는 웹 스토리지의 
 
 ## Session Storage
 
 ## 비교
+
+
 
 
 생명 주기
