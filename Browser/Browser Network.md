@@ -86,26 +86,23 @@ CORS(Cross-Origin Resource Sharing)는 브라우저가 자신의 출처가 아�
 요청 헤더에 origin을 확인하고 Access-Control-Allow-Origin의 설정을 비교하여 검증한다.
 https://developer.mozilla.org/ko/docs/Web/HTTP/CORS#%EC%A0%91%EA%B7%BC_%EC%A0%9C%EC%96%B4_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4_%EC%98%88%EC%A0%9C
 
-# Cache
+# HTTP Cache
 ---
 캐시(Cache)는 자주 사용하는 데이터나 값을 미리 복사해놓는 임시 장소로, 미리 복사해 놓고 재 사용시 계산없이 빠른 속도록 데이터를 접근하게 할 수 있다.
 
-## HTTP Cache
-HTTP 캐시는 추후에 재 사용할 수 있도록 요청에 대한 응답을 저장한다.
+HTTP 캐시는 추후에 재 사용할 수 있도록 HTTP요청에 대한 응답을 저장한다.
 
-### 캐시의 종류
-HTTP캐시에는 크게 개인 캐시, 공유 캐시 두 가지가 있다.
+## 캐시의 종류
+HTTP캐시에는 크게 사설 캐시, 공유 캐시 두 가지가 있다.
 
-#### 사설 캐시(Private Cache)
+### 사설 캐시(Private Cache)
 특정 클라이언트에 묶인 캐시로 일반적으로 브라우저 캐시를 의미한다. 즉 다른 클라이언트와 공유되지 않고 개인화된 응답을 저장한다.
 만약 컨텐츠를 개인 캐시에만 저장하려면 private 속성을 지정해야 한다.
 ```HTTP
 Cache-contol: private
 ```
 
-
-
-#### 공유 캐시(Shared Cache)
+### 공유 캐시(Shared Cache)
 공유 캐시는 클라이언트와 서버 사이에 위치하는 캐시로 사용자간에 공유될 수 있다. 공유 캐시에는 프록시 캐시와 관리형 캐시가 있다.
 
 - 프록시 캐시
@@ -113,7 +110,6 @@ Cache-contol: private
 서비스 개발자가 관리하지 않고 HTTP 헤더로 제어해야 한다.
 
 최근에는 HTTPS가 보편화 되면서 프록시 캐시가 내용을 보지 못할 가능성이 커 중간에 제대로 동작하지 않을 가능성이 있다.
-
 ```HTTP
 Cache-Control: no-store, no-cache, max-age=0, must-revalidate, proxy-revalidate
 ```
@@ -122,7 +118,7 @@ Cache-Control: no-store, no-cache, max-age=0, must-revalidate, proxy-revalidate
 관리형 캐시는 서비스 개발자가 원본 서버 대신 우회하여 명시적으로 배포하는 서비스를 통해 사용하는 캐시다. 따라서 서비스 개발자가 직접 컨트롤이 가능하다.
 대표적으로는 역방향 프록시, CDN, Cache API와 함께 사용하는 서비스 워커가 있다.
 
-### 캐싱 대상
+## 캐싱 대상
 HTTP 캐시에 저장되는 데이터 덩어리 하나하나를 캐싱 대상, 캐시 엔트리라고 한다. 캐시들은 보통 GET에 대한 응답만을 캐싱하며 다른 메서드들은 제외된다.
 기본 캐시키(primary cache key)는 요청 메서드 그리고 대상 URI로 구성되는데 주로 URI만 사용된다.
 캐시 엔트리 의 대상은 아래와 같다.
@@ -134,45 +130,40 @@ HTTP 캐시에 저장되는 데이터 덩어리 하나하나를 캐싱 대상, �
 
 캐시 엔트리는 요청이 컨텐츠 협상의 대상인 경우, 두 번째 키에 의해 구별되는 여러개의 응답들로 구성 될 수 있다.
 
-#### Vary
+### Vary
 Vary를 이용해서 같은 URL로 이루어진 하나의 엔트리를 여러개의 구별되는 응답들로 나눌 수 도 있다. 
 예를 들어`Accept-Language`와 같은 속성은 다른 언어의 컨텐츠이고 구별이 필요한데 Vary로 이를 명시하면 응답을 구분하여 엔트리에 저장될 수 있도록 한다.
 ```
 Vary: Accept-Language
 ```
 
-
-### 캐싱 과정
-먼저 HTTP의 초기 요청은 캐시가 없는 상태로 요청을 보낸다. 그 후에 응답을 
-
-
-### Cache-control
-
+## Cache-control
 먼저 캐시는 만료시간을 가지고 만료 시간 이후에는 재 검증 과정을 거쳐 재 사용되거나 폐기 하는 과정을 거친다.
-이 만료시간에 따라 fresh,stale 상태로 나뉜다.
+이 만료시간에 따라 캐시는 fresh, stale 상태로 나뉜다.
 
-#### 만료 기간과 fresh, stale상태
+### 만료 기간과 fresh, stale상태
 먼저 캐시의 상태는 age를 기준으로 판별되며, 응답 생성 이후 경과한 시간을 의미한다.
 이 age는 Date를 통해서 알 수 있다.
-Cache-control 속성에 max-age 값을 지정할 수 있는데 이 max-age는 최대 경과 시간을 의미하며 max-age와 age의 차이값을 통해 fresh 상태가 판별된다.
+Cache-control 속성에 max-age 값을 지정할 수 있는데 이 max-age는 최대 경과 시간을 의미하며 캐시의 만료 기간을 지정할 수 있다. 
+max-age와 age의 차이값을 통해 수명을 알 수 있으며, 이 유효기간에 따라 fresh상태에서 stale상태로 변경된다.
 
-Expires도 캐시의 수명을 지정하는데 경과 시간을 의미한다  명시적으로 시간을 지정하며 파싱이나 구현에서 버그가 많아 잘 사용되지 않는다.
-둘 다 있을 경우 max-age가 더 우선된다.
+Expires도 캐시의 수명을 지정하는데 경과 시간을 의미한다.  명시적으로 시간을 지정하여 파싱이나 구현에서 버그가 많아 잘 사용되지 않는다.
 
-#### 만료 이후 재 검증
+Expires, max-age가 둘 다 있을 경우 max-age가 더 우선된다.
+
+### 만료 이후 재 검증
 만료 이후 stale 상태가 되면 바로 폐기되지 않고 재검증 을 거친다.
-만료 이후 재 검증은 조건부 요청을 통해서 진행된다.
-여기에는 If-Modifed-Since와 IF-None-Match가 있다.
+만료 이후 재 검증은 조건부 요청을 통해서 진행된다. 여기에 사용되는 헤더 속성으로 If-Modifed-Since와 If-None-Match가 있다.
 
-Last-Modifed값이 있으면  If-Modifed-Since속성을 통해 서버에 전송하며 재 검증을 하며 서버가 이를 비교하여 만료되지 않으면 304 Not Modified를 통해 반환하여 다시 캐시를 갱신하고 재 사용한다. 만약 최신화 되어 있다면 200응답의 새로운 데이터를 보낸다.
+Last-Modifed값이 있으면  If-Modifed-Since속성을 통해 서버에 전송하며 재 검증을 하며, 서버가 Last-Modifed값을 기준으로 비교하며 데이터가 최신화 되지 않았다면 304 Not Modified를 통해 응답을 반환하고 기존에 있던 캐시를 갱신하고 다시 사용한다. 
+만약 데이터가 최신화 되어 있다면 200응답의 새로운 데이터를 보낸다.
 
-Etag값이 있으면 If-Modifed-Since속성을 통해 서버에 전송하여 데이터가 변경되었는지 비교 후 응답을 내린다.
+ETag값이 있으면 If-None-Match속성을 통해 서버에 전송하여 재 검증을 한다. 데이터가 최신화 되어 있다면 
 
 둘 다 잇을시에는 Etag가 더 우선시 되어진다. 
 RFC9110에서는 둘 다 사용할것을 권장한다.
 
-
-#### no-cache, no-store 캐시 금지
+### no-cache, no-store 캐시 금지
 no-store는 캐시 응답을 저장하지 않겠다는 의미다. 이는 저장하지 않는다는 의미지 삭제한다는 의미는 아니다. 
 그래서 이전에 응답이 있을 경우 재검증을 하지 않기 때문에 재사용할 여지가 잇다.
 그리고 개인 정보나 최신 정보를 위해 이를 사용하려고 한다면 priviate을 고려해 봐야 하낟.
@@ -180,7 +171,7 @@ no-store는 캐시 응답을 저장하지 않겠다는 의미다. 이는 저장�
 
 no-cache는 현재 저장한 캐시를 사용하지 않고 재 검증한다는 의미다. 따라서 재 검증이 필요한 경우에는 no-store보다 no-cache가 더 적합하다. 그래서 오래된 응답에 대해서는 no-cache를 통해서 최신화 처리가 가능하다.
 
-#### reload, force reload
+### reload, force reload
 새로 고침은 최신 버전의 리소스로 업데이트 하는 경우로 
 GET / HTTP/1.1
 Host: example.com
@@ -195,14 +186,13 @@ Host: example.com
 Pragma: no-cache
 Cache-Control: no-cache
 
-#### 정적파일의 재검증 방지
+### 정적파일의 재검증 방지
 CSS같이 오래되어도 상관없는 파ㅣㅇㄹ은 
 Cache-Control: max-age=31536000, immutable
 max-age를 길게하고 immutable를 통해서 재검증이 필요하지 않음을 명시적으로 나타낼 수 있다.
 이후 재 검증이 필요하게 되면 URL에 버전을 명시하여 데이터를 최신화 할 수 잇다.
 
-### 헤더 캐싱 속성
-
+### Cache-contrl 헤더 속성
 Cache-Control 값에는 max-age, nocache, no-store, private, public
 Etag
 Last-Modified
