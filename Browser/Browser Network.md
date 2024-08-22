@@ -82,8 +82,11 @@ TCP의 HOLB 현상을 해결했다.
 CORS(Cross-Origin Resource Sharing)는 브라우저가 자신의 출처가 아닌 다른 출처로 자원을 서버에 요청하는 상황에서, 서버가 요청의 허가를 결정하는 HTTP 헤더 기반 메커니즘이다.
 단순 요청(Simple requests)이 아닌 사전 요청(Preflighted requests)에 의해서도 결정된다.
 
-브라우저는 보안 상의 이유로 자기 자신의 출처가 아닌 HTTP응답에 대해서 CORS에러를 발생시켜 응답을 거부한다.
-하지만 다른 출처에서의 리소스가 필요한 경우가 있다. 다른 출처의 리소스를 받기 위해서 Origin, Access-Control-Allow-Origin를 통해 컨트롤을 한다. 
+브라우저는 기본적으로 동일 오리진 정책을 가지는데 이는 크로스 사이트 요청 위조(CSRF)문제를 방지하고자 구현된 정책이다.
+CORS는 동일 오리진 정책을 확장하여 외부의 서드파티 역할을 하는 서버에 승인 하에 리소스를 공유할 수 있도록 한다. 브라우저는 요청을 하고 서버에서 크로스 오리진에 대해 엑세스를 허용하는 응답을 받으면 엑세스를 허용한다. 만약 승인이 안되면 이를 거부하고 CORS에러를 발생시킨다.
+
+따라서 CORS에러를 발생시키지 않고 서드파티 서버에서 리소스를 받으려면 서버의 승인이 필요하며 이는 Access-Control-Allow-Origin속성의 응답을 통해 제어된다.
+
 
 ```http
 GET /resources/public-data/ HTTP/1.1
@@ -109,18 +112,17 @@ Content-Type: application/xml
 […XML Data…]
 
 ```
-이렇게 되면 서버는 모든 출처에게 자신의 리소스를 접근할 수 있음을 의미한다.
+이렇게 되면  Access-Control-Allow-Origin이 와일드 카드 값으로 지정하여 서버는 모든 출처에 대해 허가한다는 의미로 에러가 발생하지 않고 브라우저는 승인되었음을 인지하고 리소스를 받는데 성공한다.
 
-만약 제한하고 싶다면 
+만약 동일 출처로 제한하고 싶다면 요청에 담긴 Origin과 같은 값으로 지정하면 같은 출처에 대해서만 승인한다는 의미로 다른 출처는 접근하지 못하고 에러가 발생한다.
 ```http
 Access-Control-Allow-Origin: https://foo.example
 ```
-출처를 명시하며 이런 상황에서는 foo.example이외의 도메인에서는 교차출처정책 위반으로 접근하지 못한다.
 
 ### 단순 요청(Simple requests), 사전 요청(Preflighted requests)
 #### 단순 요청
-단순 요청은 비교적 간단하게 데이터를 요청이며 데이터의 변경이 없는  
-기술적으로 아래의 조건을 만족하는 요청이다.
+단순 요청은 비교적 간단한 데이터 요청이며 데이터의 변경이 없이 조회만 하는 경우다.
+기술적으로는 아래의 조건을 만족하는 요청이다.
 
 - 다음 중 하나의 메서드
 	- GET
@@ -134,7 +136,7 @@ Access-Control-Allow-Origin: https://foo.example
 		- application/x-www-form-urlencoded
 		- multipart/form-data
 		- text/plain
-- RedableStram 객체가 사용되지 않는 경우
+- ReadableStram 객체가 사용되지 않는 경우
 #### 사전 요청
 사전 요청은 CORS에서 데이터의 변경 등 민감한 요청에 대해 보안을 위해 추가된 요청이다.
 먼저 OPTIONS 메서드를 통해서 서버에 요청을 보낸다. 이 때 아래 요청 헤더도 포함하여 전송된다.
@@ -147,8 +149,14 @@ Access-Control-Allow-Methods: POST, GET, OPTIONS
 Access-Control-Allow-Headers: X-PINGOTHER, Content-Type
 Access-Control-Max-Age: 86400
 
-사전 요청이 완료되면 그 후에 실제 HTTP 요청이 전송된다.
+사전 요청이 완료되면 그 후에 실제 HTTP 요청이 전송된다. 
 
+Access-Control-Request-Method - 사전 요청 시 사용할 메서드를 의미한다.
+Access-Control-Request-Headers - 사전 요청시 사용할 사용자 정의 헤더를 나타낸다.
+
+Access-Control-Allow-Methods - 해당 메서드가 유효한 메서드임을 알린다.
+Access-Control-Allow-Headers - 이 헤더들이 실제 사용할 수 있는 허용된 헤더임을 알린다.
+Access-Control-Max-Age - 사전요청에 대한 최대 캐시 시간이며 해당 시간동안은 사전 요청을 보내지 않도록 한다.
 
 https://developer.mozilla.org/ko/docs/Web/HTTP/CORS#%EC%A0%91%EA%B7%BC_%EC%A0%9C%EC%96%B4_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4_%EC%98%88%EC%A0%9C
 
@@ -320,7 +328,28 @@ https://toss.tech/article/smart-web-service-cache
 
 # Web Storage
 ---
-종류
+## Cookie
+쿠키는 서버가 브라우저에 전송하는 작은 데이터 조각으로 브라우저가 받아 서버에 요청을 할 때 함께 전송되는 데이터다.
+브라우저를 기준으로 판단할 때 사용된다. 주로 사용자의 상태를 저장하는데 이용된다.
+
+3가지 목적으로 사용된다.
+세션 관리
+	서버에 저장해야할 로그인, 장바구니, 게임 스코어등의 정보관리
+개인화
+	사용자 선호, 테마 등
+트래킹
+	사용자 행동에 대한 데이터 분석
+
+요즘에는 쿠키보다 웹 스토리지 API인 localStorage, sessionStorage등을 더 많이 사용
+
+
+
+## Local Storage
+
+## Session Storage
+
+## 비교
+
 
 생명 주기
 
