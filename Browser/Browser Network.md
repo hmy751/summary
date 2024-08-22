@@ -80,10 +80,76 @@ TCP의 HOLB 현상을 해결했다.
 
 ## CORS
 CORS(Cross-Origin Resource Sharing)는 브라우저가 자신의 출처가 아닌 다른 출처로 자원을 서버에 요청하는 상황에서, 서버가 요청의 허가를 결정하는 HTTP 헤더 기반 메커니즘이다.
-이 결정은 서버가 실제 요청을 허가할 것인지 확인하기 위해 보내는 사전 요청(Preflight)에서 결정된다.
+단순 요청(Simple requests)이 아닌 사전 요청(Preflighted requests)에 의해서도 결정된다.
 
-여기서 origin은 URL중 프로토콜, 호스트명, 포트번호를 말한다.
-요청 헤더에 origin을 확인하고 Access-Control-Allow-Origin의 설정을 비교하여 검증한다.
+브라우저는 보안 상의 이유로 자기 자신의 출처가 아닌 HTTP응답에 대해서 CORS에러를 발생시켜 응답을 거부한다.
+하지만 다른 출처에서의 리소스가 필요한 경우가 있다. 다른 출처의 리소스를 받기 위해서 Origin, Access-Control-Allow-Origin를 통해 컨트롤을 한다. 
+
+```http
+GET /resources/public-data/ HTTP/1.1
+Host: bar.other
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:71.0) Gecko/20100101 Firefox/71.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip,deflate
+Connection: keep-alive
+Origin: https://foo.example
+```
+
+```http
+HTTP/1.1 200 OK
+Date: Mon, 01 Dec 2008 00:23:53 GMT
+Server: Apache/2
+Access-Control-Allow-Origin: *
+Keep-Alive: timeout=2, max=100
+Connection: Keep-Alive
+Transfer-Encoding: chunked
+Content-Type: application/xml
+
+[…XML Data…]
+
+```
+이렇게 되면 서버는 모든 출처에게 자신의 리소스를 접근할 수 있음을 의미한다.
+
+만약 제한하고 싶다면 
+```http
+Access-Control-Allow-Origin: https://foo.example
+```
+출처를 명시하며 이런 상황에서는 foo.example이외의 도메인에서는 교차출처정책 위반으로 접근하지 못한다.
+
+### 단순 요청(Simple requests), 사전 요청(Preflighted requests)
+#### 단순 요청
+단순 요청은 비교적 간단하게 데이터를 요청이며 데이터의 변경이 없는  
+기술적으로 아래의 조건을 만족하는 요청이다.
+
+- 다음 중 하나의 메서드
+	- GET
+	- HEAD
+	- POST
+- 사용자 정의 헤더를 포함하지 않고, 브라우저가 기본적으로 설정하는 헤더만 포함한다. 기본 헤더는 아래와 같다.
+	- Accept
+	- Accept-Language
+	- Content-Language
+	- Content-Type의 경우 아래의 중 하나로 설정한 경우
+		- application/x-www-form-urlencoded
+		- multipart/form-data
+		- text/plain
+- RedableStram 객체가 사용되지 않는 경우
+#### 사전 요청
+사전 요청은 CORS에서 데이터의 변경 등 민감한 요청에 대해 보안을 위해 추가된 요청이다.
+먼저 OPTIONS 메서드를 통해서 서버에 요청을 보낸다. 이 때 아래 요청 헤더도 포함하여 전송된다.
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: content-type,x-pingother
+
+그럼 서버는 응답으로 아래와 같이 보내며 해당 메서드와 헤더가 허용된다는 것을 응답한다.
+Access-Control-Allow-Origin: https://foo.example
+Access-Control-Allow-Methods: POST, GET, OPTIONS
+Access-Control-Allow-Headers: X-PINGOTHER, Content-Type
+Access-Control-Max-Age: 86400
+
+사전 요청이 완료되면 그 후에 실제 HTTP 요청이 전송된다.
+
+
 https://developer.mozilla.org/ko/docs/Web/HTTP/CORS#%EC%A0%91%EA%B7%BC_%EC%A0%9C%EC%96%B4_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4_%EC%98%88%EC%A0%9C
 
 # HTTP Cache
