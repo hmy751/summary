@@ -82,7 +82,6 @@ TCP의 HOLB 현상을 해결했다.
 CORS(Cross-Origin Resource Sharing)는 브라우저가 자신의 출처가 아닌 다른 출처로 자원을 서버에 요청하는 상황에서, 서버가 요청의 허가를 결정하는 HTTP 헤더 기반 메커니즘이다.
 이 결정은 서버가 실제 요청을 허가할 것인지 확인하기 위해 보내는 사전 요청(Preflight)에서 결정된다.
 
-
 여기서 origin은 URL중 프로토콜, 호스트명, 포트번호를 말한다.
 요청 헤더에 origin을 확인하고 Access-Control-Allow-Origin의 설정을 비교하여 검증한다.
 https://developer.mozilla.org/ko/docs/Web/HTTP/CORS#%EC%A0%91%EA%B7%BC_%EC%A0%9C%EC%96%B4_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4_%EC%98%88%EC%A0%9C
@@ -169,8 +168,38 @@ Last-Modifed값이 있으면  If-Modifed-Since속성을 통해 서버에 전송�
 
 Etag값이 있으면 If-Modifed-Since속성을 통해 서버에 전송하여 데이터가 변경되었는지 비교 후 응답을 내린다.
 
-둘 다 
+둘 다 잇을시에는 Etag가 더 우선시 되어진다. 
+RFC9110에서는 둘 다 사용할것을 권장한다.
 
+
+#### no-cache, no-store 캐시 금지
+no-store는 캐시 응답을 저장하지 않겠다는 의미다. 이는 저장하지 않는다는 의미지 삭제한다는 의미는 아니다. 
+그래서 이전에 응답이 있을 경우 재검증을 하지 않기 때문에 재사용할 여지가 잇다.
+그리고 개인 정보나 최신 정보를 위해 이를 사용하려고 한다면 priviate을 고려해 봐야 하낟.
+또 no-store를 남용하다보면 응답을 저장하지 않기 때문에 뒤로/앞으로 가기와 같은 탐색에서도 캐싱이 되지 않을 가능성이 있다.
+
+no-cache는 현재 저장한 캐시를 사용하지 않고 재 검증한다는 의미다. 따라서 재 검증이 필요한 경우에는 no-store보다 no-cache가 더 적합하다. 그래서 오래된 응답에 대해서는 no-cache를 통해서 최신화 처리가 가능하다.
+
+#### reload, force reload
+새로 고침은 최신 버전의 리소스로 업데이트 하는 경우로 
+GET / HTTP/1.1
+Host: example.com
+Cache-Control: max-age=0
+If-None-Match: "deadbeef"
+If-Modified-Since: Tue, 22 Feb 2022 20:20:20 GMT
+와 같이 조건부로 전송하여 유효성 검사를 실시하게 한다.
+
+강제 새로 고침은
+GET / HTTP/1.1
+Host: example.com
+Pragma: no-cache
+Cache-Control: no-cache
+
+#### 정적파일의 재검증 방지
+CSS같이 오래되어도 상관없는 파ㅣㅇㄹ은 
+Cache-Control: max-age=31536000, immutable
+max-age를 길게하고 immutable를 통해서 재검증이 필요하지 않음을 명시적으로 나타낼 수 있다.
+이후 재 검증이 필요하게 되면 URL에 버전을 명시하여 데이터를 최신화 할 수 잇다.
 
 ### 헤더 캐싱 속성
 
@@ -184,8 +213,6 @@ If-Modified_since
 If-None-Match
 
 stale-while-revalidate
-
-### 유효성, 검증
 
 
 # Web Storage
