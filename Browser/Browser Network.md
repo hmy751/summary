@@ -158,52 +158,99 @@ Expires, max-age가 둘 다 있을 경우 max-age가 더 우선된다.
 Last-Modifed값이 있으면  If-Modifed-Since속성을 통해 서버에 전송하며 재 검증을 하며, 서버가 Last-Modifed값을 기준으로 비교하며 데이터가 최신화 되지 않았다면 304 Not Modified를 통해 응답을 반환하고 기존에 있던 캐시를 갱신하고 다시 사용한다. 
 만약 데이터가 최신화 되어 있다면 200응답의 새로운 데이터를 보낸다.
 
-ETag값이 있으면 If-None-Match속성을 통해 서버에 전송하여 재 검증을 한다. 데이터가 최신화 되어 있다면 
+ETag값이 있으면 If-None-Match속성을 통해 서버에 전송하여 재 검증을 한다. ETag값을 비교하여 데이터가 최신화 되어 있다면 200의 응답으로 새로운 데이터를 보내고, 되지 않았다면 304 Not Modified 응답을 통해 회신하여 캐시를 재 사용한다.
 
-둘 다 잇을시에는 Etag가 더 우선시 되어진다. 
-RFC9110에서는 둘 다 사용할것을 권장한다.
+Last-Modified, ETag 둘 다 있을시에는 Etag가 더 우선시 되어진다. 
+RFC9110에서는 서버에서 응답 시 둘 다 사용할것을 권장한다. 캐시 뿐만 아니라 CMS의 마지막 수정 시간표시, 크롤러에서 크롤링 빈도 조정 등 정보의 목적도 필요하므로 Last-Modified속성도 보내는 것을 권장한다.
 
 ### no-cache, no-store 캐시 금지
-no-store는 캐시 응답을 저장하지 않겠다는 의미다. 이는 저장하지 않는다는 의미지 삭제한다는 의미는 아니다. 
-그래서 이전에 응답이 있을 경우 재검증을 하지 않기 때문에 재사용할 여지가 잇다.
-그리고 개인 정보나 최신 정보를 위해 이를 사용하려고 한다면 priviate을 고려해 봐야 하낟.
-또 no-store를 남용하다보면 응답을 저장하지 않기 때문에 뒤로/앞으로 가기와 같은 탐색에서도 캐싱이 되지 않을 가능성이 있다.
+no-store는 캐시 응답을 저장하지 않겠다는 의미다. 이는 저장하지 않는다는 의미지 이전의 캐시 응답 자체를 삭제한다는 의미는 아니다. 
+그래서 이전에 응답이 있을 경우 재 검증을 하지 않기 때문에, no-store를 명시해도 이전 캐시를 재 사용할 여지가 있다.
+그리고 개인 정보나 최신 정보를 위해 이를 사용하려고 한다면 no-store보다는 priviate을 고려해 볼 수 있다.
+또 no-store를 남용 하다보면 응답을 저장하지 않기 때문에 뒤로/앞으로 가기와 같은 탐색에서도 캐싱이 되지 않을 가능성이 있다.
 
-no-cache는 현재 저장한 캐시를 사용하지 않고 재 검증한다는 의미다. 따라서 재 검증이 필요한 경우에는 no-store보다 no-cache가 더 적합하다. 그래서 오래된 응답에 대해서는 no-cache를 통해서 최신화 처리가 가능하다.
+no-cache는 현재 저장한 캐시를 바로 사용하지 않고 재 검증한다는 의미다. 따라서 재 검증, 데이터의 최신화 확인이 필요한 경우에는 no-store보다는 no-cache가 더 적합하다. 그래서 오래된 응답에 대해서는 no-cache를 통해서 최신화 처리가 가능하다.
 
 ### reload, force reload
-새로 고침은 최신 버전의 리소스로 업데이트 하는 경우로 
+#### reload
+페이지의 새로 고침은 최신 버전의 리소스로 업데이트 하는 경우로 
+```http
 GET / HTTP/1.1
 Host: example.com
 Cache-Control: max-age=0
 If-None-Match: "deadbeef"
 If-Modified-Since: Tue, 22 Feb 2022 20:20:20 GMT
-와 같이 조건부로 전송하여 유효성 검사를 실시하게 한다.
+```
+와 같은 헤더로 조건부로 전송하여 유효성 검사를 실시하게 한다.
 
-강제 새로 고침은
+#### force reload
+강제 새로 고침은 no-cache모드 동작처럼 모든 리소스를 재 검증하겠다는 의미로 새로고침을 한다.
+```http
 GET / HTTP/1.1
 Host: example.com
 Pragma: no-cache
 Cache-Control: no-cache
+```
+헤더는 위와 같은 형태로 no-cache를 통해 진행된다.
 
-### 정적파일의 재검증 방지
-CSS같이 오래되어도 상관없는 파ㅣㅇㄹ은 
+### 정적파일의 재 검증 방지
+CSS같은 자주 변경되지 않고 오래 유지하는 정적 파일들은 재 검증을 방지하여 사용한다.
+```http
 Cache-Control: max-age=31536000, immutable
-max-age를 길게하고 immutable를 통해서 재검증이 필요하지 않음을 명시적으로 나타낼 수 있다.
-이후 재 검증이 필요하게 되면 URL에 버전을 명시하여 데이터를 최신화 할 수 잇다.
+```
+max-age를 길게하거나, immutable를 통해서 재검증이 필요하지 않음을 명시적으로 나타낼 수 있다.
+이후 재 검증이 필요하게 되면 URL에 버전을 명시하여 데이터를 최신화 한다.
 
-### Cache-contrl 헤더 속성
+### Cache-control 헤더 디렉티브(Directive)
+Cache-control 속성에 디렉티브를 지정하여 캐시를 컨트롤 할 수 있다. 같은 디렉티브라도 요청과 응답에서 사용되는 의미가 약간 다르기도 하며 차이가 있다.
+#### 요청에서 디렉티브
+
+| 디렉티브     | 설명                                                                          |
+| -------- | --------------------------------------------------------------------------- |
+| max-age  | 명시된 시간보다 나이가 많은 응답은 받아들이지 않겠다는 의미며, 기존에 남아있는 캐시를 max-age=0으로 설정하여 막을 수도 있다. |
+| no-cache | 저장되어 있는 HTTP응답을 사용하기 전에 반드시 검증(Validation)을 진행한다는 의미다.                      |
+| no-store | 해당 HTTP 요청을 통해 받아오는 HTTP응답은 어떠한 종류의 캐시에도 저장하지 않겠다는 의미다.                     |
+
+#### 응답에서 디렉티브
+
+| 디렉티브            | 설명                                                                             |
+| --------------- | ------------------------------------------------------------------------------ |
+| max-age         | 해당 HTTP 응답이 유효하다고 판단될 수 있는 최대시간이다. 이를 통해 만료시간을 컨트롤 할 수 있다. Expires보다 더 우선시 된다. |
+| must-revalidate | 해당 HTTP 응답이 만료되면 반드시 서버에 검증 요청을 보내야 한다는 의미며, 검증 요청을 강제한다.                      |
+| no-store        | 해당 HTTP응답을 어떠한 종류의 캐시에도 저장하면 안 된다는 의미다.                                        |
+| public          | 해당 HTTP응답이 어떠한 캐시에도 저장될 수 있다는 의미다.                                             |
+| private         | 해당 HTTP응답이 개인, 사설 캐시에만 저장될 수 있다는 의미다.                                          |
+https://it-eldorado.tistory.com/142
+
 Cache-Control 값에는 max-age, nocache, no-store, private, public
 Etag
 Last-Modified
 expires
 
-요청헤더
+
 If-Modified_since
 If-None-Match
 
 stale-while-revalidate
 
+### 디렉티브 외에 HTTP캐시에 관여되는 속성들
+- ETag
+ETag는 데이터를 식별하는 값으로, 캐시가 만료된 이후 재 검증을 할 때 쓰인다.
+
+- Last-Modified
+Last-Modified는 데이터의 최근 수정 날짜를 의미하며, 재 검증의 조건부 요청에 사용되기도 하며 휴리스틱 캐싱으로 판별의 기준으로도 사용된다.
+
+- Expires
+max-age와 같이 수명을 판별할 때 사용되는 값이다. 절대적인 값으로 사용이 어려워 max-age사용이 더 권장되고 우선순위에서도 밀린다.
+
+- If-Modified-since
+조건부 요청에 사용되는 속성으로 만료후에 Last-Modified값을 통해 재 검증을 요청하는 속성이다. 만료 후 Last-Modified값이 있다면 요청에 If-Modified-since속성으로 전송하여 재 검증을 요청한다.
+
+- If-None-Match
+조건부 요청에 사용되는 속성으로 만료후에 ETag값을 통해 재 검증을 요청하는 속성이다. 만료 후 ETag값이 있다면 이를 If-None-Match를 통해 전송하여 재 검증을 요청한다.
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#reload_and_force_reload
+https://toss.tech/article/smart-web-service-cache
 
 # Web Storage
 ---
