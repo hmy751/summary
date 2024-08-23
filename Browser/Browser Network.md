@@ -352,17 +352,6 @@ Cache-control 속성에 디렉티브를 지정하여 캐시를 컨트롤 할 수
 | private         | 해당 HTTP응답이 개인, 사설 캐시에만 저장될 수 있다는 의미다.                                          |
 https://it-eldorado.tistory.com/142
 
-Cache-Control 값에는 max-age, nocache, no-store, private, public
-Etag
-Last-Modified
-expires
-
-
-If-Modified_since
-If-None-Match
-
-stale-while-revalidate
-
 ### 디렉티브 외에 HTTP캐시에 관여되는 속성들
 - ETag
 ETag는 데이터를 식별하는 값으로, 캐시가 만료된 이후 재 검증을 할 때 쓰인다.
