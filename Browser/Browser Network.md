@@ -524,8 +524,37 @@ SSO 에는 OAuth, SAML 방식이 있다
 ### OAuth 2.0
 SSO의 한 방법으로 앱이 암호를 제공하지 않고도 다른 웹사이트의 사용자 정보에 안전하게 액세스할 수 있도록 하는 개방형 표준이다.
 
+즉 클라이어트(서비스 기업)이 구글, 페이스북과 같은 플랫폼의 사용자 데이터에 접근하기 위해 사용자의 접근 권한을 위임 받을수 있는 표준 프로토콜이다.
 
+#### 주체
+- Resource Owner - 리소스 소유자 유저를 말한다.
+- Authorization, Resource Server - Authorization은 유저를 인증하고 Client에게 엑세스 토큰을 발급해주는 서버이며, Resource 서버는 유저의 정보, 리소스를 가지고 있는 서버를 말한다. 두 서버는 같은 곳에서 관리할 수 도 있다.
+- Client - 개발하려는 서비스를 말한다. 리소스에 접근하려는 입장에서는 Client로 볼 수 있기 때문이다.
 
-구성은 사용자, 서비스, 인증 서버, 리소스 서버로 구성된다.
+#### 애플리케이션 등록
+OAuth 서비스를 이용하기전에 선행되어야 하는 작업으로 Client를 Resource Server에 등록해야 하는 작업이다. 이때 Redirect URI를 등록해야 한다.
+
+Redirect URI는 OAuth서비스 인증에 성공한 유저를 리다이렉션 시키는 URI다. 
+
+등록과정을 마치면, Client ID와 Client Secret을 얻는데  둘은 Access Token을 획득하는데 사용된다. Client Secret은 절대 유츌되어서는 안된다.
+
+#### 동작 메커니즘
+1. 로그인 요청
+유저가 서비스에서 로그인을 요청하면 Client에서 OAuth 프로세스를 시작한다. 
+클라이언트는 인증서버에 사용자의 브라우저를 보내야 하는데 쿼리 스트링에 정보를 담아내서 전송한다. 
+인증서버가 제공하는 Authorization URL에 redirect url, client id, scope, response_type등을 보낸다. 
+2. 로그인 페이지 제공
+클라이언트가 빌드한 Authorization URL로 이동된 유저는 제공된 로그인 페이지에서 ID/PW를 입력하여 인증한다.
+3. 인증 성공 및 Authorization Code 발급, Redirect URI로 디렉션
+인증이 성공하면 Redirect URI로 Authorization Code를 포함하여 사용자를 리디렉션 시킨다.
+4. Authorization Code, Access Token 교환
+client는 Authorization Sever에 Authorization code를 전달하고 Access Token을 저장한다.
+이후 Resource Server에서 리소스에 접근하기 위해 사용된다.
+5. 로그인 성공
+이후 클라이언트는 위 과정을 성공적으로 마치면 유저에게 로그인 성공을 알린다.
+6. Access Token 리소스 접근
+이후 유저 정보에 접근할 때 클라이언트에 요청하면 Access Token을 가지고 클라이언트는 Resouce server에 접근하여 정보를 얻고 서비스를 제공한다.
+
+Authorization code는 리디렉션시 url에 토큰을 직접 전달하면 탈취 가능성이 있어 사용된다.
 
 https://hudi.blog/oauth-2.0/
