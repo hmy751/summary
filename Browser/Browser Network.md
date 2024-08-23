@@ -397,7 +397,7 @@ https://toss.tech/article/smart-web-service-cache
 트래킹
 	사용자 행동에 대한 데이터 분석
 
-요즘에는 쿠키보다 웹 스토리지 API인 localStorage, sessionStorage등을 더 많이 권장한다. 쿠키는 모든 요청마다 함께 전송되어 성능이 떨어질 우려가 있다.
+요즘에는 쿠키보다 웹 스토리지 API인 localStorage, sessionStorage등의 사용을 더 많이 권장한다. 쿠키는 많아지게 되면 모든 요청마다 함께 전송되어 성능이 떨어질 우려가 있다.
 
 ### 헤더 설정
 Set-Cookie를 통해 서버가 클라이언트에게 저장을 요구한다. 
