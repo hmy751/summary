@@ -44,3 +44,5 @@ function shallowEqual(objA: mixed, objB: mixed) {
 ```
 
  이러한 특성을 고려하면 useMemo, React.memo등을 통해 재 렌더링을 방지해 성능을 개선하려고 해도, 중첩된 props는 같은 값 이어도 정확히 비교를 못하고 다르다고 판단하기 때문에 의도한대로 동작하지 않을 수 있다.
+
+
