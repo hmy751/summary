@@ -441,3 +441,33 @@ JWT는 탈취 당할 경우 보안에 취약하여 이를 보완하기 위해 Ac
 유효 기간 축소를 통해 탈취를 방지할 수 있지만 로그인을 자주 해야 하며 길게 하면 보안에 취약하게 된다.
 
 Access Toekn은 접근에 관여하며, Refresh Token은 재발급에 관여하는 토큰으로 이를 해결한다.
+상대적으로 Access Token은 유효기간을 짧게 주고, Refresh Token은 길게 준다. 
+
+HTTP 요청 시 Access Token을 통해 인가를 통과하며 만료 후에는 재 발급 용도인 Refresh Token으로 재 발급하여 다시 Access Token을 받아 사용하게 된다.
+
+#### 과정
+우선 첫 로그인 시 인증 후 서버에서  Access Token과 Refresh Token을 생성하고 Refresh Token을 서버측 DB 에 저장하고 Access Token, Refresh Token둘다 클라이언트에 전송한다.
+클라이언트에서는 두 토큰을 받아 저장하고 데이터 요청에 Access Token을 헤더에 담아 보낸다.
+만료 전까지는 Access Token을 서버에서 검증하여 데이터 요청을 통과 시킨다.
+Access Token이 만료되면 서버에서 이를 알리고 클라이언트에서는 다시 Access Toekn, Refresh Token을 전송한다.
+서버에서는 두 토큰을 받아 확인하여 Refresh Token을 DB에 저장되어 있던 Refresh Token을 비교한다. 만료되지않고 유효하다면 다시 새로운 Access Token을 발급하여 클라이언트에 보낸다.
+이후 로그아웃 할 경우 서버에서 Refresh Token을 삭제한다
+
+https://tansfil.tistory.com/59
+
+## SSO
+SSO(Single Sign-ON)은 한번의 사용자 인증으로 다수의 앱에 사용자 인증을 허용하는 방식이다.
+
+하나의 사용자 정보를 기반으로 여러 시스템을 하나의 통합 인증으로 가능하게 한다.
+
+SSO를 사용하게 되면 여러 사이트에 대한 암호를 기억하며 관리할 필요가 없다. 그리고 수동으로 입력하지 않아도 돼 접근에 대한 생산성이 향상된다.
+기업 입장에서는 수많은 유저의 암호를 기억하고, 재설정 요청등에 관리가 필요가 없어 관리 리소스를 줄일 수 있다.
+
+SSO 에는 OAuth, SAML 방식이 있다
+
+### OAuth
+SSO의 한 방법으로 앱이 암호를 제공하지 않고도 다른 웹사이트의 사용자 정보에 안전하게 액세스할 수 있도록 하는 개방형 표준이다.
+
+구성은 사용자, 서비스, 인증 서버, 리소스 서버로 구성된다.
+
+
