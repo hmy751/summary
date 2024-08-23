@@ -351,7 +351,6 @@ Content-type: text/html
 Set-Cookie: yummy_cookie=choco
 Set-Cookie: tasty_cookie=strawberry
 
-
 ### 라이프 타임
 쿠키의 라이프 타임은 두가지로 나뉜다 
 세션 쿠키와 영속 쿠키로
@@ -359,6 +358,7 @@ Set-Cookie: tasty_cookie=strawberry
 세션 쿠키는 Expires, Max-Age속성이 없는 쿠키며  브라우저의 세션을 기준으로 삭제된다.
 퍼시스턴트, 영구(Persistent, Permanent)쿠키는 Expires, Max-Age속성이 명시된 쿠키며 만료 후 쿠키가 삭제 된다.
 Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT;
+
 ### 보안
 쿠키를 보호하는 방법에는 Secure, HttpOnly등이 있다.
 Secure는 HTTPS 프로토콜에서만 전송되도록 하는 속성이다. 
