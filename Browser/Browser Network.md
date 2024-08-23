@@ -20,12 +20,18 @@ https://www.cloudflare.com/ko-kr/learning/ssl/transport-layer-security-tls/
 ### Stateless
 무상태성이란 클라이언트와 서버사이에 상태를 유지하지 않음을 의미한다.
 예를 들어 로그인을 한 경우 로그인에 대한 상태를 서버가 보존하지 않고 토큰 형태로 저장하여 통신에 실어서 보내는 형태로 전달한다.
-상태를 직접 서버가 소유하지 않기 때문에 서버의 증설이나 축소에도 상관없이 대처가 된다. 
-다만 단점은 데이터를 상대적으로 더 많이 사용한다.
+
+장점은 상태를 직접 서버가 소유하지 않기 때문에 서버의 증설이나 축소에도 상관없이 대처가 된다. 
+단점은 로그인의 사용자와 같은 상태를 유지해야 하는데 이를 할 수가 없다.
+이를 보완하기 위해 쿠키나 세션을 이용한다.
 
 ### Connectionless
-비연결성은 연결을 유지하지 않는다는 의미다. 
-HTTP 요청을 할 때 클라이언트와 서버가 TCP 연결을 통해 잠시 연결하여 통신을 하지만 요청 후 바로 끊기 때문에 서버 자원의 소모가 더 적게 된다.
+비 연결성은 연결을 유지하지 않는다는 의미다. 
+HTTP 요청을 할 때 클라이언트와 서버가 TCP 연결을 통해 잠시 연결하여 통신을 하지만 요청 후 바로 끊는 형식이다.
+
+장점은 서버 자원의 소모가 더 적고, 수많은 클라이언트의 요청에도 대응할 수 있게 된다.
+단점은 연결이 끊기면 계속해서 연결을 다시 맺어야 하므로 시간이 추가되며 오버헤드가 크다. 
+이러한 단점을 보완하기 위해 HTTP 지속 연결(Persistent Connections)로 보완한다.
 
 ## HTTP 메시지
 메시지 구조는 Start Line, Header, Empty Line, Message Body로 구성된다.
@@ -159,6 +165,56 @@ Access-Control-Allow-Headers - 이 헤더들이 실제 사용할 수 있는 허�
 Access-Control-Max-Age - 사전요청에 대한 최대 캐시 시간이며 해당 시간동안은 사전 요청을 보내지 않도록 한다.
 
 https://developer.mozilla.org/ko/docs/Web/HTTP/CORS#%EC%A0%91%EA%B7%BC_%EC%A0%9C%EC%96%B4_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4_%EC%98%88%EC%A0%9C
+
+## HTTP Header
+HTTP 헤더는 HTTP통신에서 부가적인 정보를 전송할 수 있도록 해준다. 대소문자를 구분하지 않고 이름과 ':' 다음에 오는 값으로 이루어진다.
+
+컨텍스트에 따라 그룹이 나뉜다.
+- General Header - 요청 및 응답 메시지 모두 사용가능한 헤더 항목이다.
+- Request Header - 클라이언트 자체에 대한 자세한 정보를 포함하는 헤더
+- Response Header - 서버 자체에 대한 정보와 같이 응답에 대한 부가적인 정보를 갖는 헤더
+- Entity Header - 컨텐츠 길이나 MIME 타입과 같이 엔티티 바디에 대한 자세한 정보를 포함하는 헤더로 요청과 응답 모두에서 사용 가능하다.
+
+### General Header
+- Date - HTTP 메시지를 생성한 일시
+- Connection - 클라이언트와 서버 간 연결에 대한 옵션으로 TCP 커넥션에 관한 제어다. 디폴트로 Connection: Keep-Alive가 지정되며 커넥션을 일정기간 유지하게 된다.
+- Cache-Control - 캐시 제어와 관련이 있다.
+
+### Entity Header
+- Content-Type - 해당 개체에 포함되는 미디어 타입 정보
+- Content-Language - 해당 개체와 가장 잘 어울리는 사용자 언어
+- Content-Encoding - 해당 개체 대이터의 압축방식
+- Content-Length - 해당 개체의 바이트 길이 또는 크기
+
+### Request Header
+- Host - 요청 하는 호스트에 대한 호스트 명 및 포트 번호
+- User-Agent - 클라이언트 소프트웨어 명칭 및 버전 정보
+- From - 클라이언트 사용자 메일 주소
+- Cookie - 서버에 의해 설정된 쿠키 정보
+- Referer - 바로 직전에 머물던 웹 링크 주소
+- Origin - 요청 Origin으로 CORS처리에 관여된다.
+- Authorization -  인증 토큰을 서버로 보낼때 사용하는 헤더, 토큰의 종류 + 실제 토큰 문자를 전송
+
+- Accept관련 - 주로 클라이언트가 우너하는 내용을 담는다.
+	- Accept - 클라이언트 자신이 원하는 미디어 타입 및 우선순위
+	- Accept-Charset - 클라이언트 자신이 원하는 문자 집합
+	- Accept-Encoding - 클라이언트 자신이 원하는 문자 인코딩 방식
+	- Accept-Language - 클라이언트 자신이 원하는 가능한 언어
+	- 각각이 Entity Header 항목들과 대응된다.
+
+### Response Header
+- Server - 서버 소프트웨어 정보
+- Accept-Range
+- Set-Cookie - 서버 측에서 설정하는 쿠키 정보
+- Expires - 쿠키 관련
+- Age - 쿠키 관련
+- Etag - 쿠키 관련
+- Proxy-authenticate - 프록시 서버 뒤에 있는 리소스에 접근하는데 사용되어야 하는 인증 메서드를 정의한다.
+- Allow - 해당 엔티티에 대한 서버 측에서 지원 가능한 HTTP 메서드의 리스트를 나타낸다.
+  OPTIONS에 대한 응답용 항목으로 사용되기도 한다.
+- Access-Contorl-Allow-Origin - CORS와 관련이 있다.
+
+https://gmlwjd9405.github.io/2019/01/28/http-header-types.html
 
 # HTTP Cache
 ---
@@ -465,9 +521,11 @@ SSO를 사용하게 되면 여러 사이트에 대한 암호를 기억하며 관
 
 SSO 에는 OAuth, SAML 방식이 있다
 
-### OAuth
+### OAuth 2.0
 SSO의 한 방법으로 앱이 암호를 제공하지 않고도 다른 웹사이트의 사용자 정보에 안전하게 액세스할 수 있도록 하는 개방형 표준이다.
+
+
 
 구성은 사용자, 서비스, 인증 서버, 리소스 서버로 구성된다.
 
-
+https://hudi.blog/oauth-2.0/
