@@ -41,6 +41,7 @@ HTTP 요청을 할 때 클라이언트와 서버가 TCP 연결을 통해 잠시 
 바디에는 실제 전송할 데이터들이 담긴다.
 ![[CS/Network.excalidraw.md#^group=DDgYSY-Ns_HMJwik63ysp|1200]]
 ## HTTP 메서드
+
 주로 쓰는 메서드는 5가지가 있다.
 - GET - 리소스 조회, 오직 데이터를 받기만 한다.
 - POST - 요청 데이터 처리, 주로 신규 등록에 사용된다.
@@ -65,6 +66,7 @@ https://inpa.tistory.com/entry/WEB-%F0%9F%8C%90-HTTP-%EB%A9%94%EC%84%9C%EB%93%9C
 https://inpa.tistory.com/entry/HTTP-%F0%9F%8C%90-%EB%B0%B1%EC%97%94%EB%93%9C-%EB%A1%9C%EB%93%9C%EB%A7%B5-HTTP%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%BC%EA%B9%8C%EC%9A%94
 
 ## HTTP 버전
+
 ### HTTP 1.0
 HTTP 1.0은 한 연결당 하나의 요청을 처리하도록 되어 있다. 매 요청마다 TCP 핸드 쉐이크 요청을 해야 하기 때문에 RTT가 증가한다.
 > RTT(Round Trip Time)는 요청 부터 요청에 대한 응답을 받을 때까지의 왕복시간을 의미한다.
@@ -93,7 +95,6 @@ CORS는 동일 오리진 정책을 확장하여 외부의 서드파티 역할을
 
 따라서 CORS에러를 발생시키지 않고 서드파티 서버에서 리소스를 받으려면 서버의 승인이 필요하며 이는 Access-Control-Allow-Origin속성의 응답을 통해 제어된다.
 
-
 ```http
 GET /resources/public-data/ HTTP/1.1
 Host: bar.other
@@ -118,7 +119,7 @@ Content-Type: application/xml
 […XML Data…]
 
 ```
-이렇게 되면  Access-Control-Allow-Origin이 와일드 카드 값으로 지정하여 서버는 모든 출처에 대해 허가한다는 의미로 에러가 발생하지 않고 브라우저는 승인되었음을 인지하고 리소스를 받는데 성공한다.
+위의 예시에서는  Access-Control-Allow-Origin이 와일드 카드 값`*`으로 지정하여 서버는 모든 출처에 대해 허가한다는 의미로 에러가 발생하지 않고, 브라우저는 승인되었음을 인지하고 리소스를 받는데 성공한다.
 
 만약 동일 출처로 제한하고 싶다면 요청에 담긴 Origin과 같은 값으로 지정하면 같은 출처에 대해서만 승인한다는 의미로 다른 출처는 접근하지 못하고 에러가 발생한다.
 ```http
@@ -143,20 +144,25 @@ Access-Control-Allow-Origin: https://foo.example
 		- multipart/form-data
 		- text/plain
 - ReadableStram 객체가 사용되지 않는 경우
+
 #### 사전 요청
 사전 요청은 CORS에서 데이터의 변경 등 민감한 요청에 대해 보안을 위해 추가된 요청이다.
 먼저 OPTIONS 메서드를 통해서 서버에 요청을 보낸다. 이 때 아래 요청 헤더도 포함하여 전송된다.
+```http
 Access-Control-Request-Method: POST
 Access-Control-Request-Headers: content-type,x-pingother
+```
 
 그럼 서버는 응답으로 아래와 같이 보내며 해당 메서드와 헤더가 허용된다는 것을 응답한다.
+```http
 Access-Control-Allow-Origin: https://foo.example
 Access-Control-Allow-Methods: POST, GET, OPTIONS
 Access-Control-Allow-Headers: X-PINGOTHER, Content-Type
 Access-Control-Max-Age: 86400
-
+```
 사전 요청이 완료되면 그 후에 실제 HTTP 요청이 전송된다. 
 
+#### CORS 사전 요청관련 HTTP 헤더
 Access-Control-Request-Method - 사전 요청 시 사용할 메서드를 의미한다.
 Access-Control-Request-Headers - 사전 요청시 사용할 사용자 정의 헤더를 나타낸다.
 
@@ -167,6 +173,7 @@ Access-Control-Max-Age - 사전요청에 대한 최대 캐시 시간이며 해�
 https://developer.mozilla.org/ko/docs/Web/HTTP/CORS#%EC%A0%91%EA%B7%BC_%EC%A0%9C%EC%96%B4_%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4_%EC%98%88%EC%A0%9C
 
 ## HTTP Header
+
 HTTP 헤더는 HTTP통신에서 부가적인 정보를 전송할 수 있도록 해준다. 대소문자를 구분하지 않고 이름과 ':' 다음에 오는 값으로 이루어진다.
 
 컨텍스트에 따라 그룹이 나뉜다.
@@ -423,7 +430,7 @@ Secure는 HTTPS 프로토콜에서만 전송되도록 하는 속성이다.
 
 HttpOnly는 XSS(Cross-site 스크립팅) 공격을 방지하기 위해 사용되며, 해당 쿠키는 자바스크립트의 Document.cookie API로 접근하지 못하게 되며 해당 쿠키는 변경되지 못하고 서버에 전송만 된다.
 
-SameSite는 크로스 출처에 대해 전송을 막는 속성이다. CSRF에 대한 보호 할 수 있다. 아직은 실험단계다.
+SameSite는 크로스 출처에 대해 전송을 막는 속성이며 CSRF에 대해 보호 할 수 있다. 아직은 실험단계다.
 
 ### 쿠키의 스코프
 쿠키의 스코프는 Domain 및 Path 속성으로 범위를 정의한다.
@@ -434,7 +441,7 @@ Path는 Cookie헤더를 전송하기 하기 위해 요청되는 URL 경로다. �
 
 ## Local Storage, Session Storage
 
-로컬 스토리지와 세션 스토리지는 브라우저에 데이터를 저장하는 방법이다. 키,값 형태로 ㄱ저장할 수 있다.
+로컬 스토리지와 세션 스토리지는 html5에서 제공하는 브라우저에 데이터를 저장하는 방법이다. 키,값 형태로 저장할 수 있다.
 
 세션 스토리지는 브라우저의 탭을 기준으로 유지가 된다. 
 로컬 스토리지는 window를 기준으로 유지 되며, 명시적으로 제거하지 않는 이상 영구적으로 저장된다.
@@ -447,7 +454,7 @@ Path는 Cookie헤더를 전송하기 하기 위해 요청되는 URL 경로다. �
 쿠키는 Expires, Max-Age속성으로 시간 제한을 설정할 수 있지만 로컬 스토리지와 세션 스토리지는 불가능 하다
 
 ### 소멸 기준
-쿠키는 시간 제한을 두면 창을 닫아도 기간 동안 유지 되며, 시간 제한을 두지 않을 경우 창과 함께 소멸 된다.
+쿠키는 시간 제한을 두면 창을 닫아도 해당 기간 동안 유지 되며, 시간 제한을 두지 않을 경우 창과 함께 소멸 된다.
 로컬 스토리지는 명시적으로 삭제해야 소멸 된다.
 세션 스토리지는 브라우저의 탭을 기준으로 소멸이 된다.
 
@@ -459,31 +466,34 @@ Path는 Cookie헤더를 전송하기 하기 위해 요청되는 URL 경로다. �
 
 ### 개발자의 직접 선별, 제어 가능
 쿠키는 저장되면 모두 전송되어진다. 그리고 Httponly속성이 지정되면 서버에서만 변경할 수 있다.
-이외 웹 스토리지들은 직접 선택해서 전송할 수 있고 자바스크립트로 가공이 가능하다.
+로컬 스토리지와 세션 스토리지는 직접 선택해서 전송할 수 있고 자바스크립트로 가공이 가능하다.
 
 ## 사용처
 
 쿠키는 세션을 기준으로 유지되며 기한을 지정할 수 있어 세션에 대한 정보를 유지할 수 있고, 보안을 강화할 수 있는 특징이 있다. 브라우저, 유저를 구별할 수 있는 특징이 있어 사용자 인증, 추적 등에 사용이 된다.
+
 로컬 스토리지는 영구 보관되어 장기간 데이터를 보관해야 하는 경우이며, 사용자 설정, 테마 토큰등이 있다
-세션 스토리지는 브라우저의 창을 기준으로 유지되어, 단기 데이터를 보관할 때 사용될 수 있다.
+
+세션 스토리지는 브라우저의 탭을 기준으로 유지되어, 단기 데이터를 보관할 때 사용될 수 있다.
 
 # User Auth
 ---
 ## 쿠키, 세션 인증
 
-먼저 쿠키와 서버의 세션은 HTTP의 무상태성과 비연결성을 보완하기 위해 사용된다.
-쿠키 인증 방식은 고유 식별 정보를 쿠키에 담아 보내는 방식이며, 정보를 클라이언트에서 저장한다. 쿠키 자체는 저장 용량도 작고 정보가 그대로 노출되어 보안에 취약할 수 있다. 
+쿠키와 서버의 세션은 HTTP의 무상태성과 비연결성을 보완하기 위해 사용되는 저장소다.
+
+쿠키 인증 방식은 고유 식별 정보를 쿠키에 담아 보내는 방식이며, 정보를 클라이언트에서 저장한다. 
+쿠키 자체는 저장 용량도 작고 정보가 그대로 노출되어 보안에 취약할 수 있다. 
 
 세션 인증은 인증 정보를 서버측 세션에 저장하고 관리하는 방식이다. 유저 인증 후에 유저를 식별하기 위한 정보를 세션에 저장하고 쿠키로 클라이언트에 전송하는 방식이다. 
-세션 아이디를 보내어 유의미한 정보는 아니지만 어쨋든 탈취 될 위험이 있으며, 유저가 많아지게 되면 세션 사용으로 서버에 부하가 심해질수도 있다.
+세션 아이디를 보내어 유의미한 정보는 아니지만 전송 과정에서 탈취 될 위험이 있으며, 유저가 많아지게 되면 세션 사용으로 서버에 부하가 심해질수도 있다.
 
 ## 토큰 인증
 
 토큰 인증 방식은 서버에서 인증 후 인증되었다는 정보를 토큰으로 저장하고 이를 헤더에 담아 클라이언트에 보내며 헤더를 통해 서로 주고받는 형식이다. 클라이언트는 저장한 토큰을 HTTP 요청 헤더에 포함시켜 전송하고 서버는 전달받은 토큰을 검증하고 요청에 응답한다. 또 서버의 DB를 조회할 필요가 없다.
 
 세션을 사용하지 않아 무상태성 특징으로 서버의 부하가 덜 하다는 특징이 있다.
-토큰 자체의 데이터 길이가 길어 네트워크 부하가 심해질수 잇다.
-
+하지만 토큰 자체의 데이터 길이가 길어 네트워크 부하가 심해질수 잇다.
 
 ## JWT
 
@@ -495,27 +505,26 @@ JWT는 JSON데이터를 Base64 URL-safe Encode를 통해 인코딩하여 직렬�
 JWT구조는 Header, Payload, Signature로 나뉜다.
 헤더에는 사용할 타입과 해시 알고리즘의 종류가 있고, 페이로드에는 서버에서 보낸 사용자 권한 정보와 데이터가 담겨 있다. 시그니쳐 에는 헤더에서 정의한 알고리즘 방식을 통해 암호화를 한 내용으로 서버에서 비밀키로 복호화가 가능하며 토큰의 위변조 여부를 확인하는데 사용된다.
 
-JWT는 별도의 저장소가 필요 없고, 무상태로 서버의 부하도 적고 확장에도 유리하다 토큰 기반으로 다른 로그인 시스템에 접근 및 권한 공유가 가능하다(쿠키와 차이)
+JWT는 별도의 저장소가 필요 없고, 무상태 전송으로 서버의 부하도 적고 확장에도 유리하다. 토큰 기반으로 다른 로그인 시스템에 접근 및 권한 공유가 가능하다.(쿠키와 차이)
+하지만 토큰이 길어질 수록 네트워크의 부하가 커지고 무상태이기 때문에 탈취 되면 제어가 불가능하다. 따라서 중요한 정보는 담지 말아야 한다.
 
-토큰이 길어질 수록 네트워크의 부하가 커지고 stateless이기 때문에 탈취 되면 제어가 불가능하다 따라서 중요한 정보는 담지 말아야 한다.
+### Access Token, Refresh Token
+JWT는 탈취 당할 경우 보안에 취약한 특징이 있다. 그래서 유효기간을 축소하면 탈취를 방지할 수 있지만, 로그인을 자주 해야하기 때문에 완전한 방법은 아니다.
+따라서 탈취에 대한 보안과 다수의 인증과정을 보완하기 위해 Access Token, Refresh Token의 이중 방식을 사용한다.
 
-### Acess Token, Refresh Token
-JWT는 탈취 당할 경우 보안에 취약하여 이를 보완하기 위해 Access Token, Refresh Token의 이중 방식을 사용한다.
-
-유효 기간 축소를 통해 탈취를 방지할 수 있지만 로그인을 자주 해야 하며 길게 하면 보안에 취약하게 된다.
-
-Access Toekn은 접근에 관여하며, Refresh Token은 재발급에 관여하는 토큰으로 이를 해결한다.
+Access Toekn은 인가에 관여하는 토큰, Refresh Token은 토큰 재발급에 관여하는 토큰으로 이를 해결한다.
 상대적으로 Access Token은 유효기간을 짧게 주고, Refresh Token은 길게 준다. 
 
-HTTP 요청 시 Access Token을 통해 인가를 통과하며 만료 후에는 재 발급 용도인 Refresh Token으로 재 발급하여 다시 Access Token을 받아 사용하게 된다.
+HTTP 요청 시 Access Token을 통해 인가과정을 통과하며, Access Token 만료 후에는 Access Token재 발급 용도인 Refresh Token으로 새로운 Access Token을 발급하여 사용하게 된다.
 
 #### 과정
-우선 첫 로그인 시 인증 후 서버에서  Access Token과 Refresh Token을 생성하고 Refresh Token을 서버측 DB 에 저장하고 Access Token, Refresh Token둘다 클라이언트에 전송한다.
-클라이언트에서는 두 토큰을 받아 저장하고 데이터 요청에 Access Token을 헤더에 담아 보낸다.
-만료 전까지는 Access Token을 서버에서 검증하여 데이터 요청을 통과 시킨다.
-Access Token이 만료되면 서버에서 이를 알리고 클라이언트에서는 다시 Access Toekn, Refresh Token을 전송한다.
-서버에서는 두 토큰을 받아 확인하여 Refresh Token을 DB에 저장되어 있던 Refresh Token을 비교한다. 만료되지않고 유효하다면 다시 새로운 Access Token을 발급하여 클라이언트에 보낸다.
-이후 로그아웃 할 경우 서버에서 Refresh Token을 삭제한다
+우선 첫 로그인 시 인증 후 서버에서  Access Token과 Refresh Token을 생성하고 Refresh Token을 서버측 DB 에 저장하고 Access Token, Refresh Token모두를 클라이언트에 전송한다.
+클라이언트에서 두 토큰을 받아 저장하고 데이터 요청에 Access Token을 헤더에 담아 보내며 데이터에 접근한다.
+Access Token 만료 전까지는 Access Token을 서버에서 검증하여 데이터 요청을 통과 시킨다.
+Access Token이 만료되면 서버에서 이를 클라이언트에게 알리고, 클라이언트에서는 다시 Access Token과 Refresh Token을 전송한다.
+서버에서는 두 토큰을 받아 확인하여 Refresh Token을 DB에 저장되어 있던 Refresh Token과 비교한다. 
+만료되지 않고 유효하다면 다시 새로운 Access Token을 발급하여 클라이언트에 보낸다.
+이후 로그아웃을 요청할 경우 서버에서 Refresh Token을 삭제한다
 
 https://tansfil.tistory.com/59
 
@@ -525,45 +534,47 @@ SSO(Single Sign-ON)은 한번의 사용자 인증으로 다수의 앱에 사용�
 
 하나의 사용자 정보를 기반으로 여러 시스템을 하나의 통합 인증으로 가능하게 한다.
 
-SSO를 사용하게 되면 여러 사이트에 대한 암호를 기억하며 관리할 필요가 없다. 그리고 수동으로 입력하지 않아도 돼 접근에 대한 생산성이 향상된다.
-기업 입장에서는 수많은 유저의 암호를 기억하고, 재설정 요청등에 관리가 필요가 없어 관리 리소스를 줄일 수 있다.
+SSO를 사용하게 되면 유저 입장에서는 여러 사이트에 대한 암호를 기억하며 관리할 필요가 없다. 그리고 수동으로 입력하지 않아도 돼 접근에 대한 생산성이 향상된다.
+이를 사용하는 서비스 기업 입장에서는 수많은 유저의 암호를 기억하고, 재설정 요청등에 관리가 필요가 없어 관리 리소스를 줄일 수 있다.
 
 SSO 에는 OAuth, SAML 방식이 있다
 
 ### OAuth 2.0
-SSO의 한 방법으로 앱이 암호를 제공하지 않고도 다른 웹사이트의 사용자 정보에 안전하게 액세스할 수 있도록 하는 개방형 표준이다.
-
-즉 클라이어트(서비스 기업)이 구글, 페이스북과 같은 플랫폼의 사용자 데이터에 접근하기 위해 사용자의 접근 권한을 위임 받을수 있는 표준 프로토콜이다.
+SSO의 한 방법으로 클라이어트(서비스 기업)가 구글, 페이스북과 같은 플랫폼의 사용자 데이터 접근 권한을 위임 받을 수 있는 프로토콜이다.
 
 #### 주체
-- Resource Owner - 리소스 소유자 유저를 말한다.
-- Authorization, Resource Server - Authorization은 유저를 인증하고 Client에게 엑세스 토큰을 발급해주는 서버이며, Resource 서버는 유저의 정보, 리소스를 가지고 있는 서버를 말한다. 두 서버는 같은 곳에서 관리할 수 도 있다.
-- Client - 개발하려는 서비스를 말한다. 리소스에 접근하려는 입장에서는 Client로 볼 수 있기 때문이다.
+- Resource Owner - 리소스 소유자 즉 유저를 말한다.
+- Authorization Server, Resource Server - Authorization server는 유저를 인증하고 Client에게 엑세스 토큰을 발급해주는 서버이며, Resource server는 유저의 정보, 리소스를 가지고 있는 서버를 말한다. 두 서버는 같은 곳에서 관리할 수 도 있다.
+- Client - 개발하려는 서비스 기업을 말한다. 리소스에 접근하려는 입장에서는 Client로 볼 수 있기 때문이다.
 
 #### 애플리케이션 등록
 OAuth 서비스를 이용하기전에 선행되어야 하는 작업으로 Client를 Resource Server에 등록해야 하는 작업이다. 이때 Redirect URI를 등록해야 한다.
+Redirect URI는 OAuth서비스 인증에 성공한 유저를 리다이렉션 시키는 위치다.
 
-Redirect URI는 OAuth서비스 인증에 성공한 유저를 리다이렉션 시키는 URI다. 
-
-등록과정을 마치면, Client ID와 Client Secret을 얻는데  둘은 Access Token을 획득하는데 사용된다. Client Secret은 절대 유츌되어서는 안된다.
+등록과정을 마치면, Client ID와 Client Secret을 얻는데 둘은 Access Token을 획득하는데 사용된다. Client Secret은 절대 유츌되어서는 안된다.
 
 #### 동작 메커니즘
 1. 로그인 요청
-유저가 서비스에서 로그인을 요청하면 Client에서 OAuth 프로세스를 시작한다. 
-클라이언트는 인증서버에 사용자의 브라우저를 보내야 하는데 쿼리 스트링에 정보를 담아내서 전송한다. 
-인증서버가 제공하는 Authorization URL에 redirect url, client id, scope, response_type등을 보낸다. 
-2. 로그인 페이지 제공
-클라이언트가 빌드한 Authorization URL로 이동된 유저는 제공된 로그인 페이지에서 ID/PW를 입력하여 인증한다.
-3. 인증 성공 및 Authorization Code 발급, Redirect URI로 디렉션
-인증이 성공하면 Redirect URI로 Authorization Code를 포함하여 사용자를 리디렉션 시킨다.
-4. Authorization Code, Access Token 교환
-client는 Authorization Sever에 Authorization code를 전달하고 Access Token을 저장한다.
-이후 Resource Server에서 리소스에 접근하기 위해 사용된다.
-5. 로그인 성공
-이후 클라이언트는 위 과정을 성공적으로 마치면 유저에게 로그인 성공을 알린다.
-6. Access Token 리소스 접근
-이후 유저 정보에 접근할 때 클라이언트에 요청하면 Access Token을 가지고 클라이언트는 Resouce server에 접근하여 정보를 얻고 서비스를 제공한다.
+Resource Owner가 서비스에서 로그인을 요청하면 Client에서 OAuth 프로세스를 시작한다. 
+Client는 Authorizaion Server에서 Resource Owner에게 보낼 브라우저에 필요한 정보를 쿼리 스티링에 담아 보낸다.
+Authorizaion Server가 제공할 브라우저의 Authorization URL에 redirect url, client id, scope, response_type등이 사용된다. 
 
-Authorization code는 리디렉션시 url에 토큰을 직접 전달하면 탈취 가능성이 있어 사용된다.
+2. 로그인 페이지 제공
+Client와 Authorization Server가 빌드한 Authorization URL로 이동된 Resource Owner는 제공된 로그인 페이지에서 ID/PW를 입력하여 인증한다.
+
+3. 인증 성공 및 Authorization Code 발급, Redirect URI로 디렉션
+인증이 성공하면 Authorization Server는 Redirect URI로 Authorization Code를 포함하여 Resource Owner를 리디렉션 시킨다.
+이때 Authorization Code는 매우 짧은 시간이 설정되며 Access Token발급에 사용된다.
+바로 Access Token을 Redirection URl로 발급하면 탈취의 위험이 있기 때문이다.
+
+4. Authorization Code, Access Token 교환
+Client는 Authorization Sever에 Authorization code를 전달하고 Access Token을 저장한다.
+이후 Resource Server에 접근하기 위해 사용된다.
+
+5. 로그인 성공
+Client는 위 과정을 성공적으로 마치면 Resource Owner에게 로그인 성공을 알린다.
+
+6. Access Token 리소스 접근
+이후 유저 정보에 접근할 때 Client에 요청하면 Access Token을 가지고 Client는 Resource Server에 접근하여 정보를 얻고 서비스를 제공한다.
 
 https://hudi.blog/oauth-2.0/
