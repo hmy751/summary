@@ -23,14 +23,15 @@ https://aws.amazon.com/ko/route53/what-is-dns/?nc1=h_ls
 
 # Transport Layer
 ---
-
 전송 계층이라고도 하며 애플리케이션과 인터넷 계층 사이의 데이터가 전달 될때 중계역할을 한다.
 대표적으로는 TCP, UDP가 있다
 TCP는 연결지향 프로토콜을 사용해서 연결하며 신뢰성을 확보해준다.
 UDP는 단순 데이터그램 패킷 교환방식을 사용하며 데이터만 주고 받는다.
-TCP는 세그먼트라고 부른다.
-- TCP 헤더
-TCP 헤더에는 시퀀스, ACK 번호가 존재하며 ACK번호는 데이터가 바르게 수신됐음을 의미하는 번호다.
+
+## TCP 3-way 핸드 쉐이크
+
+## TLS 핸드 쉐이크
+
 
 # Internet Layer
 ---
