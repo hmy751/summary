@@ -24,10 +24,16 @@ HTTP, DNS, FTP, TFTP, SNMP등이 있다.
 
 ### DNS
 ^7823ff
-DNS(Domain Name System)는 전화 번호부 처럼 고유한 IP주소를 사람이 해석하기 쉬운 도메인 이름으로 저장하고, 또 반대로 변환하여 고유한 IP주소를 찾을수 있도록 하는 관리 시스템이다.
+DNS(Domain Name System)는 전화 번호부 처럼 고유한 IP주소를 사람이 해석하기 쉬운 도메인 이름으로 저장하고, 또 반대로 변환하여 고유한 IP주소를 찾을수 있도록 하는 관리 시스템을 말한다.
 
-DNS 룩업
-ARP
+DNS에서 IP주소 검색 과정의 구성은 DNS서버와 DNS리졸버가 있고 이를 통해서 진행된다.
+
+먼저 DNS서버는 호스트명과 IP주소의 대응 관계 및 여러 정보들인 리소스 레코드를 저장하는 장소다.
+DNS 리졸버는 도메인 주소를 가지고 도메인 서버와 재귀적으로 질문 및 응답과정을 통해 저장하고 있는 DNS서버에서 IP주소를 찾는 역할을 한다. 조회 과정은 DNS루트 서버에서 부터 시작하며 URL의 루트 부분부터 해당하는 요소들의 DNS서버들을 찾아나간다.
+
+#### ARP
+ARP는 
+
 https://ko.wix.com/blog/post/domain-name-system-dns
 https://aws.amazon.com/ko/route53/what-is-dns/?nc1=h_ls
 
