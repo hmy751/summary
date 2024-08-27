@@ -24,7 +24,8 @@ HTTP, DNS, FTP, TFTP, SNMP등이 있다.
 
 ### DNS
 ^7823ff
-DNS(Domain Name System)는 전화 번호부 처럼 고유한 IP주소를 도메인 이름으로 저장하는 시스템이다.
+DNS(Domain Name System)는 전화 번호부 처럼 고유한 IP주소를 사람이 해석하기 쉬운 도메인 이름으로 저장하고, 또 반대로 변환하여 고유한 IP주소를 찾을수 있도록 하는 관리 시스템이다.
+
 DNS 룩업
 ARP
 https://ko.wix.com/blog/post/domain-name-system-dns
