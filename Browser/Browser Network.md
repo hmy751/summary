@@ -39,7 +39,7 @@ HTTP 요청을 할 때 클라이언트와 서버가 TCP 연결을 통해 잠시 
 헤더는 부가 정보들이 담긴다.
 빈줄은 헤더와 바디를 구분하기 위해 들어간다.
 바디에는 실제 전송할 데이터들이 담긴다.
-![[CS/Network.excalidraw.md#^group=DDgYSY-Ns_HMJwik63ysp|1200]]
+![[Network.excalidraw#^group=DDgYSY-Ns_HMJwik63ysp|1200]]
 ## HTTP 메서드
 
 주로 쓰는 메서드는 5가지가 있다.
