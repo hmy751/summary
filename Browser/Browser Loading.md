@@ -196,6 +196,7 @@ HTTPS는 HTTP에 보안을 강화한 형태로 추가적으로 TLS(Transport Lay
 [[Network#^7823ff]]
 
 - Port
+포트는 
 
 
 - Path
