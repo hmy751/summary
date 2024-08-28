@@ -10,6 +10,9 @@ TCP/IP 4계층은 네트워크에 사용되는 프로토콜을 네개의 모델�
 [[Browser Network#^f89b88]]
 
 ### DNS
+
+^608261
+
 ^7823ff
 DNS(Domain Name System)는 전화 번호부 처럼 고유한 IP주소를 사람이 해석하기 쉬운 도메인 이름으로 저장하고, 또 반대로 변환하여 고유한 IP주소를 찾을수 있도록 하는 관리 시스템을 말한다.
 
@@ -37,6 +40,8 @@ UDP는 비연결형 프로토콜로, 단순 데이터그램 패킷 교환방식�
 
 ## TCP 3-way Handshake
 
+^35b272
+
 TCP는 통신과정에서 연결지향 프로토콜로 정확한 접속을 성립 하기위해 3-way handshake 과정을 거친다. 
 
 ![[CS/Network/Network.excalidraw.md#^group=_Mojm0vUFf4SCfdvBS_uZ|1200]]
@@ -48,6 +53,8 @@ Client가 다시 Server에게 응답을 확인한다는 의미로 ACK패킷을 �
 https://s3-ap-northeast-1.amazonaws.com/exemdocuments/intermax/wh-apm_TCP.pdf
 
 ## TLS Handshake
+
+^cff23e
 
 HTTP프로토콜이 아닌 HTTPS 프로토콜 통신에서는 TCP연결요청에 이어 TLS인증과정이 필요하다.
 

@@ -1,7 +1,6 @@
 # HTTP/HTTPS
 
 ^f89b88
-
 ---
 HTTP(Hypertext Transfer Protocol)는 통신 프로토콜로 클라이언트와 서버간의 인터넷 통신에서 필요한 정보를 요청하는 방법이다.
 애플리케이션 계층의 프로토콜이다.
@@ -581,3 +580,37 @@ Client는 위 과정을 성공적으로 마치면 Resource Owner에게 로그인
 이후 유저 정보에 접근할 때 Client에 요청하면 Access Token을 가지고 Client는 Resource Server에 접근하여 정보를 얻고 서비스를 제공한다.
 
 https://hudi.blog/oauth-2.0/
+
+# URL
+
+^08dbd0
+---
+URL은 웹에서 리소스의 고유한 주소다.
+![[Browser.excalidraw#^group=cIjPuBTG|1200]]
+
+## Protocol
+`https://`는 통신 프로토콜로 여기서는 HTTPS 프로토콜을 이용한다는 걸 알 수 있다. 
+HTTPS는 HTTP에 보안을 강화한 형태로 추가적으로 TLS(Transport Layer Security, 전송 계층 보안)과정을 통해 브라우저가 서버에 연결하도록 지시한다.
+[[TCP IP 4Layer Protocol#^21f9ea]]
+
+## Domain
+`d2.naver.com`은 웹 사이트의 도메인 이름이다. 도메인은 숫자로 구성돼 구별 및 기억하기 어려운 IP주소를 기억하기 쉽게 변경한 이름을 의미한다.
+도메인도 종류를 나눌 수 있다.
+	- TLD(Top-Level Domain, 최상위 도메인)
+	도메인 레벨 중 가장 높은 단계에 있는 도메인이다. 보통 국가나 특정 주제를 나타낸다. 
+	예로 com, net, kr등이 있다. 참고로 끝에 시작점을 루트 도메인이라고 부른다.
+	- Domain Name
+	도메인명은 도메인의 고유한 이름을 의미한다. 여기서는 naver가 도메인명이 된다.
+	- SLD(Second-Level Domain)
+	호스트 명, 서브 도메인이라고 하며, 루트 도메인 앞에 존재한다. 용도를 구분하기 위해 서브 도메인을 사용한다. 예로 m, www, dev 등이 있다.
+[[TCP IP 4Layer Protocol#^7823ff]]
+
+## Port
+포트는 네트워킹에서 IP주소와 함께 사용되어 특정 서비스나 앱을 식별하는 논리적 엔드포인트를 말한다. 즉 앱을 식별하는 역할을 한다.
+URL에서 포트번호가 생략되면 자동적으로 특정 프로토콜에 해당하는 포트번호를 사용한다. HTTP는 80, HTTPS는 443번 포트를 사용한다.
+
+## Path
+`/`파일의 경로를 의미한다. 디렉터리 구조 처럼 생각할 수 있으며 해당 기준으로 서버에서 리소스를 구성할 수 있다.
+
+## Parameter
+파라미터는 쿼리 스트링이라고도 부르며, key, value 형태로 이루어진다. 이를 통해 데이터를 전달하며 필터링이나 페이징 처럼 리소스를 동적으로 조회할 때도 사용된다. URL에 노출이 되기 때문에 민감하지 않은 정보를 보낼 때 사용된다.
