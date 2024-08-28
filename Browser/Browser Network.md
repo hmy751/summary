@@ -1,4 +1,7 @@
-# HTTP
+# HTTP/HTTPS
+
+^f89b88
+
 ---
 HTTP(Hypertext Transfer Protocol)는 통신 프로토콜로 클라이언트와 서버간의 인터넷 통신에서 필요한 정보를 요청하는 방법이다.
 애플리케이션 계층의 프로토콜이다.
