@@ -28,12 +28,30 @@ https://aws.amazon.com/ko/route53/what-is-dns/?nc1=h_ls
 TCP는 연결지향 프로토콜을 사용해서 연결하며 신뢰성을 확보해준다.
 UDP는 단순 데이터그램 패킷 교환방식을 사용하며 데이터만 주고 받는다.
 
-## TCP 3-way 핸드 쉐이크
-TCP는 
+## TCP 3-way Handshake
 
+TCP는 통신과정에서 연결지향 프로토콜로 정확한 접속을 성립 하기위해 3-way handshake 과정을 거친다. 
 
-## TLS 핸드 쉐이크
+과정은 
+Client가 Server에게 SYN패킷을 전달하고
+Server에서 Client에게 이에 대한 응답으로 SYN-ACK응답을 보낸다.
+Client가 다시 Server에게 응답을 확인한다는 의미로 ACK패킷을 보내며 연결이 이루어진다.
 
+## TLS Handshake
+
+HTTP프로토콜이 아닌 HTTPS 프로토콜 통신에서는 TCP연결요청에 이어 TLS인증과정이 필요하다.
+
+TLS인증과정은 TCP요청처럼 핸드 쉐이크 과정을 거치는데 차이점은 단순히 메시지만을 교환하지 않고 
+TLS 핸드 쉐이크 과정은 TCP 핸드 쉐이크와는 다르게 단순히 메시지 전달만을 통해 연결하지 않고 인증과정이 추가된다.
+크게 공개 키 방식을 통해 인증을 하고 인증에 성공하면 대칭 키를 서로 가져 통신을 하게 된다.
+대칭 키를 주고 받기 위한 공개 키 방식의 인증 과정이 시작된다.
+먼저 클라이언트에서 서버에 초기 암호 설정을 제안한다.(ClientHello)
+서버가 이를 수락하고 암호 설정을 응답한다.(ServerHello)
+서버가 디지털 인증서를 클라이언트에 전달한다.(Certificate)
+서버가 Server Hello 절차를 완료되었음을 알리는 메시지 Server Hello Done 메시지를 전달한다.(Server Hello Done)
+클라이언트가 서버의 인증서를 검증한다. 검증 후 세션 키 생성에 필요한 Pre-master Secret값을 생성하고 서버의 공개 키로 암호화 하여 서버에 전송한다.(Client Key Exchage)
+클라이언트와 서버는 Change Cipher Spec 메시지를 통해 세션 키, 대칭 키 방식을 통해 통신할 것이라 전달한다.(Change Cipher Spec)
+서로 세션 키를 생성하고 처음으로 세션 키를 통해 암호화 하여 Finished 메시지를 전달한다.(Finished)
 
 # Internet Layer
 ---
