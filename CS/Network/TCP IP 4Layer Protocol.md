@@ -85,13 +85,17 @@ https://study-recording.tistory.com/7
 
 ### 라우팅 프로토콜
 
-
 # Network Interface Layer
 ---
+네트워크 인터페이스 계층은 네트워크의 하드웨어들을 제어한다.
 MAC주소를 핸들링하며, 데이터 패킷을 전기신호로 바꾸어 기기에 전달할 수 있게 해준다.
 
-- MAC 주소
-- LAN 카드
+- MAC 
+- 이더넷
+- 네트워크 허브
+	- L2 스위치
+	- L3 스위치
+- 무선 LAN 카드
 - 케이블
 #### ARP
 ARP는 TCP/IP의 IP주소와 인터페이스를 식별하기 위한 MAC주소를 대응시키거나 구하는 역할을 한다.
