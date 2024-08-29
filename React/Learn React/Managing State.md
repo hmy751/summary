@@ -62,4 +62,25 @@ const [isError, setIsError] = useState(false);
 
 ## 4. 비필수적인 state 제거하기
 
+최대한 간결하게 state를 줄이기 위해서 몇가지 기준으로 제거할 수 있다.
 
+- state 모순
+예를 들어 isTyping과 isSubmitting은 동시에 true가 되는 상황은 논리적으로 불가능하다. 이럴경우 두 상태를 각각 분리하지 않고 합칠수 있다.
+- 동일한 정보를 포함하는 다른 state변수
+isEmpty와 isTyping은 서로 연관이 있는 상태다. 두 상태는 서로 모순되는 상태이므로 이 모순을 피하기 위해 isEmpty는 answer.length === 0 이라는 표현으로 불필요한 상태를 줄일 수 있다.
+- 다른 state변수로부터 파생되는 상태
+isError와 error는 서로 관계가 있는데 error를 통해서 isError의 상태를 가지고 표현하지 않아도 된다.
+
+```jsx
+const [answer, setAnswer] = useState('');  
+
+const [error, setError] = useState(null);  
+
+const [status, setStatus] = useState('typing'); // 'typing', 'submitting', or 'success'
+```
+
+## 5. 이벤트 핸들러를 연결하여 state를 설정하기
+
+모든 상호작용을 이벤트 핸들러로 연결하여 마무리한다.
+
+이렇게 선언적으로 작성하면 나중에 기존 상태를 깨지 않고도 새로운 시각정 상태를 도입할수 있고 인터렉션 자체의 로직을 변경하지 않아도 된다.
