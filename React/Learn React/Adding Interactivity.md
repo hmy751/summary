@@ -240,3 +240,60 @@ setPosition(nextPosition);
 
 ## Immer로 간결한 업데이트 로직 작성하기
 
+중첩된 객체를 변경할때 immer를 통해서 플랫하게 할수 있다.
+immer에서는 내부적으로 drafet라는 프록시의 특수 유형의 객체로 사용자가 수행하는 작업을 기록한다. 그래서 이를 통해 자유롭게 수정이 가능하다.
+
+## React에서 state변이를 권장하지 않는 이유
+
+state를 변이하지 않으면 과거의 기록이 최근에 변의에 의해 지워지지 않고 디버깅할 수 있다.
+
+최적화 전략은 state의 변경 여부에 따라서 작업을 건너뛰는데 이때 state변이를 하지 않아야 이 여부를 정확하게 확신할 수 있다.
+
+그외 새로운 기능은 state가 스냅샷처럼 취급되있는 것을 기준으로 개발 되기때문에 변이를 하게 되면 문제가 생길수 있다.
+
+요구 사항 변경에 대해서도 사용자가 양식을 이전 값으로 재설정하는 등 state의 변이가 없어야 과거의 state복사본을 통해 쉽고 빠르게 처리할 수 있다.
+
+변이가 없다고 가정되면 프록시로 감싸거나 별 다른 작업을 필요로 하지 않고 구현할 수 있다.
+
+따라서 변이하지 않아야 추후에 새로운 기능이 개발되어도 영향이 가지 않는다.
+
+# 배열 state 업데이트
+---
+배열도 객체처럼 변이 없이 업데이트 해야 한다.
+
+## 변이 없이 배열 업데이트
+
+배열 내부 항목에 접근해서 변경하거나 push, pop과 같은 배열을 변경하는 메서드를 사용하면 안된다.
+대신 새 배열을 전달해야 하며 filter, map과 같은 비변이 메서드는 가능하다.
+
+스프레드 연산자나 immer를 사용할 수 있다.
+
+배열내 객체가 있는 경우 map을 이용해서 해당 객체를 찾고 스프레드 연산자를 통해 새로운 객체르 복사하여 구할수 도 잇으며 immer를 통해서 중첩된 객체에 대한 변이를 처리할 수 잇다.
+
+```jsx
+const myNextList = [...myList];
+const artwork = myNextList.find(a => a.id === artworkId);
+artwork.seen = nextSeen;
+setMyList(myNextList);
+
+///
+
+setMyList(myList.map(artwork => {
+	if (artwork.id === artworkId) {
+		return {...artwork, seen: nextSeen };
+	}
+	...
+}));
+
+```
+
+```jsx
+	const [myList, updateMyList] = useImmer(initialList);
+
+	updateMyList(draft => {
+		const artwork = draft.find(a => a.id === id);
+		artwork.seen = nextSeen;
+	});
+
+
+```
