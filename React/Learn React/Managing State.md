@@ -251,3 +251,64 @@ key를 부여하게 되면 리액트가 부모 내 순서가 아닌 key자체로
 
 ## reducer로 state로직 통합하기
 
+컴포넌트가 복잡해지고 이벤트 핸들러가 많아지면 컴포넌트의 state의 업데이트가 파악하기 어려워진다. 
+이때 state 로직을 컴포넌트 외분의 reducer라고 하는 단일 함수로 옮길수 있다.
+
+1. state를 설정하는 것에서 action들을 전달하는 것으로 변경하기
+2. reducer 함수 작성
+3. 컴포넌트에서 reducer 사용
+각 단계를 거쳐서 reducer로 통합할 수 있다.
+
+각 이벤트 핸들러에서 action으로 변경하여 dispatch 하는 형태로 변경한다.
+그 다음 reducer 함수를 작성한다. reducer 함수 내부에서 action type에 따라서 상태를 처리하며 이 reducer 함수는 외부로 내보낼수도 있다. 
+
+컴포넌트에서 useReducer를 통해서 해당 reducer를 사용할 수 있다. 인자는 reducer 함수와 초기 상태가 전달된다.
+
+## useState와 useRedcuer 비교하기
+
+코드 크기는 이벤트 핸들러가 많아지게 되면 useReducer가 더 유리하다
+
+가독성은 간단할 때는 useState가 더 낫지만 state 변경 로직등이 복잡해지면 useReducer가 한눈에 파악하기 더 좋다.
+
+디버깅 측면에서 reducer가 어떤 action으로 인해 발생했는지 더 파악하기 쉽다.
+
+테스팅 측면에서 reducer는 컴포넌트에 의존하지 않는 순수함수 이기때문에 별도로 내보내 테스트하기 좋다.
+
+## reducer 잘 작성하기
+
+reducer는 반드시 순수해야 한다. 요청을 보내거나 사이드 이펙트를 수행해서는 안된다.
+
+## immer를 같이 활용하기
+
+immer를 같이 활용해서 useImmerReducer를 활용하면 reducer 내부에 상태 변경도 immer를 통해서 더 간결해진다.
+
+# context로 데이터 깊숙히 전달하기
+---
+Context를 사용하면 컴포넌트의 깊이가 깊어져도 state를 전달할 수 있다.
+
+## props전달의 문제
+
+전달하려믄 컴포넌트의 깊이가 깊어지면 props전달이 장황하고 불편해지며 이렇게 많이 깊어지는 경우르 props drilling이라고 한다.
+
+## props 전달의 대안
+
+Context를 사용하면 상위 컴포넌트가 그 아래 전테트리에 데이터를 제공한다.
+
+1. context 만들기
+2. context 사용하기
+3. context 제공하기
+
+## Context는 중간 컴포넌트를 통과한다.
+
+## context를 사용하기 전에
+
+context를 너무 쉽게 남용하기전에 
+props 전달을 시도하기 props를 사용하면 데이터의 흐름이 명확해진다.
+그리고 props 데이터 전달이나 context 사용전에 JSX를 children으로 전달하여 해결할 수 있다. 상위에 Layout 역할을 하는 컴포넌트가 데이터만 전달한다면 children으로 전달하는 형태로 수정하여 해결할 수 있다.
+
+## context 사용사례
+
+테마, 로그인 유저 정보, 라우팅 등에 사용할 수 있다.
+
+# Reducer와 Context
+---
