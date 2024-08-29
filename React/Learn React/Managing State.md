@@ -84,3 +84,92 @@ const [status, setStatus] = useState('typing'); // 'typing', 'submitting', or 's
 모든 상호작용을 이벤트 핸들러로 연결하여 마무리한다.
 
 이렇게 선언적으로 작성하면 나중에 기존 상태를 깨지 않고도 새로운 시각정 상태를 도입할수 있고 인터렉션 자체의 로직을 변경하지 않아도 된다.
+
+# State 구조 선택
+---
+state를 잘 구조화 해야 수정과 디버깅이 편한 컴포넌트로 설계할 수 있다.
+
+## state 구조화 원칙
+
+1. 관련 state를 그룹화한다. 두개이상의 state를 동시에 업데이트 하는경우 단일 state 변수로 병합하는 것이 좋다.
+2. state의 모순을 피한다. 여러 state조각이 서로 모순되거나 불일치 하면 오류가 생길수있다.
+3. 불필요한 state를 피한다. 기존 state 변수나 props로 계산할 수 있는것은 생성하지 않아도 된다.
+4. state 중복을 피한다. 동일한 데이터가 여러 state 변수간에 또는 중첩된 객체 내에 중복되면 동기화 state를 유지하기 어렵다.
+5. 깊게 중첩된 state는 피한다. 깊게 계층화된 state는 업데이트하기 쉽지 않다.
+
+## 관련 state 그룹화하기
+
+x,y 포지션과 같이 항상 함께 변경되는 경우는 따로 선언하기 보다 그룹화 해서 객체로 선언하는게 더 낫다. 그래야 동기화 상태를 같이 잊지않고 유지할 수 있다.
+
+## state의 모순을 피하기
+
+isSending, isSent와 같은 state가 있을경우 작동은하지만 둘 다 true로 설정되는 모순이 생길수 있으며 관리가 복잡할수 있다 이럴때는 하나의 status로 줄일 수 있다.
+
+## 불필요한 state 피하기
+
+firstName, lastName 이 있을때 굳이 fullName으로 불필요하게 추가할 필요가 없다.
+
+### props를 state에 그대로 미러링 하면 안된다.
+```jsx
+function Message({ messageColor }) {  
+	const [color, setColor] = useState(messageColor);
+```
+이렇게 useState에 초기값으로 전달하는 경우 props가 변경되도 color의 변경을 발생하지 않는다. 이유는 useState의 초기값은 초기렌더링에만 영향을 주고 그 이후에는 영향을 주지 않는다.
+props를 state로 미러링 하는 경우는 모든 업데이트를 무시하고 초기값만 전달할 때 유효하다.
+
+## state 중복을 피하기
+
+```jsx
+const initialItems = [
+  { title: 'pretzels', id: 0 },
+  { title: 'crispy seaweed', id: 1 },
+  { title: 'granola bar', id: 2 },
+];
+
+export default function Menu() {
+  const [items, setItems] = useState(initialItems);
+  const [selectedItem, setSelectedItem] = useState(
+    items[0]
+  );
+  
+  <button onClick={() => {
+    setSelectedItem(item);
+	}}>Choose</button>
+  }
+```
+이렇게 아이템 state를 복제하여 selectedItem으로 지정할 수 도 있지만 동기화가 되지 않을 수 있다.
+
+중복을 피하는 방법으로는 
+```jsx
+const initialItems = [
+  { title: 'pretzels', id: 0 },
+  { title: 'crispy seaweed', id: 1 },
+  { title: 'granola bar', id: 2 },
+];
+
+export default function Menu() {
+  const [items, setItems] = useState(initialItems);
+  const [selectedId, setSelectedId] = useState(0);
+
+  const selectedItem = items.find(item =>
+    item.id === selectedId
+  );
+  
+           <button onClick={() => {
+              setSelectedId(item.id);
+            }}>Choose</button>
+
+
+```
+아이디만 따로 state로 분리하고 items를 그대로 활용하여 selectedItem을 지정한다. 이렇게 되면 items에 있는 item과 selectedItem이 동기화 된다.
+
+## 깊게 중첩된 state는 피하기
+
+너무 깊게 형성된 객체 데이터는 업데이트하기 어렵기 때문에 정규화 과정으로 수정하면 업데이트가 더 수월해진다.
+
+# 컴포넌트 간의 state 공유
+---
+때로는 두 컴포넌트의 state가 항상 함께 변경되기를 원할 때가 있다. 이럴때는 state를 가장 가까운 부모 컴포넌트로 이동한다음 props를 통해 전달하면 된다. 이를 state 끌어올리기라고 한다.
+
+## state 끌어올리기
+
