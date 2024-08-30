@@ -175,3 +175,63 @@ props 나 state의 값 같은경우는 렌더링 과정에서 필터링하여 �
 
 ## prop이 변경되면 모든 state 재설정하기
 
+prop이 변경되어도 state가 변경되지 않아 Effect를 사용하려 할 수 있지만 이는 Effect에서도 state를 재설정하므로 리렌더링이 되고 비효율적이다.
+대신 key를 통해서 컴포넌트를 구분하여 재설정하게 할 수 있다.
+
+## props가 변경될 때 일부 state 조정하기
+
+useEffect대신 렌더링 중에 직접 state를 조정할수 있다.
+```jsx
+function List({ items }) {  
+
+const [isReverse, setIsReverse] = useState(false);  
+
+const [selection, setSelection] = useState(null);  
+
+  
+
+// Better: Adjust the state while rendering  
+// 더 나음: 렌더링 중에 state 조정  
+
+const [prevItems, setPrevItems] = useState(items);  
+
+if (items !== prevItems) {  
+
+setPrevItems(items);  
+
+setSelection(null);  
+
+}  
+
+// ...  
+
+}
+```
+위 예시는 렌더링 도중 setSelection이 호출된다. 그럼 리액트에서는 return문과 함께 종료된 직후에 List를 다시 리렌더링 한다.
+아직 LIst의 자식들을 렌더링하거나 DOM을 업데이트 하지 않기 때문에 LIst의 자식들은 기존의 selection값에 대한 렌더링을 건너뛴다.
+렌더링 도중 컴포넌트를 업데이트 하면 리액트는 반환된 JSX를 버리고 즉시 렌더링을 다시 시도한다.
+
+
+이것보다 최선은 key로 모든 state를 재설정하거나 렌더링 중에 state를 모두 계산할 수 있는지 확인하는 것이다.
+
+그리고 선택에서 state를 조정할 필요없이 id에 대한 state로 이미 있는 state를 선택하는 방법이 더 권장된다.
+```jsx
+function List({ items }) {  
+
+const [isReverse, setIsReverse] = useState(false);  
+
+const [selectedId, setSelectedId] = useState(null);  
+
+// ✅ Best: Calculate everything during rendering  
+
+// ✅ 가장 좋음: 렌더링 중에 모든 값을 계산  
+
+const selection = items.find(item => item.id === selectedId) ?? null;  
+
+// ...  
+
+}
+```
+
+## 연쇄 계산
+
