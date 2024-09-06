@@ -21,10 +21,20 @@ Next.js의 경우에는 페이지별로 Root 컴포넌트가 다르게 구성되
 ---
 JSX는 자바스크립트를 확장한 문법으로 자바스크립트 파일을 HTML과 비슷하게 마크업을 작성할 수 있도록 해준다.
 
+그리고 JSX는 HTML이 아니라 자바스크립트 문법으로 직접 브라우저에서 활용이 되지 않는다. 단지 형태만 HTML을 작성하는 것 처럼 보인다. 
+직접 활용되려면 트랜스파일에 의해 변환되어야 하며 변환 결과는 React.createElement의 함수로 반환된다.
+```jsx
+const element = <h1>Hello world</h1>;
 
+...
 
+const element = React.createElement('h1', null, 'Hello world');
+```
 
+React.createElement는 리액트 엘리먼트를 생성하는 함수로 JSX가 컴파일될 때 호출된다.
+반환값은 리액트 엘리먼트로 자바스크립트 객체이다.
 
+https://ko.react.dev/reference/react/createElement
 ## JSX의 규칙
 
 
