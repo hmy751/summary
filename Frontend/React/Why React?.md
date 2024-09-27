@@ -41,3 +41,4 @@ https://www.blog.kcd.co.kr/dom-%EC%97%90%EC%84%9C-react-fiber-%EA%B9%8C%EC%A7%80
 
 리액트에서는 명령형이 아닌 선언형으로 작성된다.
 표시할 내용을 선언만 하면 리액트가 UI를 업데이트할 방법을 알아낸다.
+
