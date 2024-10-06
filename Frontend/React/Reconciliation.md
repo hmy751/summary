@@ -13,10 +13,11 @@
 새로운 버츄어 돔과 기존 버츄어 돔에서 Diff 알고리즘을 통해 변경된 부분을 감지하고, 리액트 파이버 아키텍쳐가 변경된 부분을 작업단위로 나누어 우선순위에 따라 중요한 작업을 우선으로 처리하며, 비동기적으로 처리된다.
 
 ## React Fiber
+
 https://github.com/acdlite/react-fiber-architecture
 파이버는 각 노드에 대한 
 
-- reconciler는 트리의 어떤 부분이 변경되었는지를 계산하는 작업을 수행한다. Fiber는 Reconsiler을 재구현한 것이며 원칙적으로 렌더링과 관련이 없다.
+- reconciler는 트리의 어떤 부분이 변경되었는지를 계산하는 작업을 수행하는 기존의 아키첵쳐이다. Fiber는 reconciler을 재구현한 것이며 원칙적으로 렌더링과 관련이 없다.
 - fiber안에서 diff알고리즘 방식으로 비교하여 버츄어 돔 변경사항을 확인한 후 작업을 나눈다
 
 - fiber의 목적은 리액트가 스케쥴링의 이점을 얻는 것이고 그럴려면 4가지 원칙을 지켜야 한다.
@@ -27,8 +28,6 @@ https://github.com/acdlite/react-fiber-architecture
 스택을 재구현하는 이점은 [스택 프레임을 메모리에 보관 하고 원하는 대로(그리고](https://www.facebook.com/groups/2003630259862046/permalink/2054053404819731/) _언제든지_ ) 실행할 수 있다는 것입니다 . 이는 스케줄링에 대한 목표를 달성하는 데 중요합니다.
 
 - diff알고리즘은 버츄어 돔간의 변화를 비교 하는 알고리즘이다.
-
-
 
 
 https://d2.naver.com/helloworld/2690975
