@@ -1,3 +1,10 @@
+# Reconciliation
+---
+재조정(reconciliation)은 
+
+
+
+
 # Virtual DOM
 ---
 리액트에서 Virtual DOM은 브라우저의 DOM과는 다르다. 
