@@ -80,3 +80,6 @@ https://callmedevmomo.medium.com/virtual-dom-react-%ED%95%B5%EC%8B%AC%EC%A0%95%E
 이 중 브라우저 리소스가 가장 많이 소모되는 부분이 Layout과 Paint 과정이다. 그리고 이 두 과정은 Render 트리가 변경될때마다 재실행된다. 즉, Render 트리 변경의 최소화가 브라우저 성능을 최적화한다는 것이다.
 
 그리고 리액트는 가상 DOM과 재조정을 통해 오로지 변경사항만을 실제 DOM에 적용함으로 Render 트리 변경을 최소화한다. 다시 말해서, 브라우저가 해야할 할 일을 덜어줌으로 성능을 최적화한다.
+
+
+https://medium.com/@sht02048/%EC%83%9D%EA%B0%81%EB%B3%B4%EB%8B%A4-%EB%8D%94-%EC%84%AC%EC%84%B8%ED%95%9C-%EB%A6%AC%EC%95%A1%ED%8A%B8-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B3%BC%EC%A0%95-feat-%EB%A6%AC%EC%95%A1%ED%8A%B8-%ED%8C%8C%EC%9D%B4%EB%B2%84-44075084381a
