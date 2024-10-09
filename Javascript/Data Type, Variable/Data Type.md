@@ -208,3 +208,6 @@ typeof Symbol.iterator === 'symbol';
 
 typeof undefined === 'undefined';
 ```
+
+- NaN, isNaN()
+먼저 NaN은 Not-A-Number로 숫자가 아님을 나타낸다. 
