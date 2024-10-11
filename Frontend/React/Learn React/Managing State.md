@@ -316,4 +316,4 @@ props 전달을 시도하기 props를 사용하면 데이터의 흐름이 명확
 reducer를 통해 복잡한 state변경 로직들을 통합하고 이를 하위 컴포넌트에 context를 활용해서 이벤트 함수를 전달할수 잇다.
 그럼 state로직의 복잡성을 줄여 통합하고 props driliing 문제를 해결할 수 있다.
 
-provider 컴포넌트를 생성하여 context와 reducer 함수를 하나의 파일로 합쳐서 통합할수 도 있다.
+provider 컴포넌트를 생성하여 context와 reducer 함수를 하나의 파일로 합쳐서 통합할수 도 있다.ㄴ
