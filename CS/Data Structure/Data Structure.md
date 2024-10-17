@@ -12,8 +12,3 @@
 [[Tree]]
 [[Graph]]
 [[Hash Map]]
-
-
-
-
-
