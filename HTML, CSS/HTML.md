@@ -25,7 +25,30 @@ WAI-ARIA(Web Accessiblity Initiative - Accessible Rich Internet Applications)은
     <div role="button" ...
     <div role="dialog" ...
 ```
-		
+
+https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles
+
 - Properties
-  속성은 컴포넌트의 특징이나 상황을 정의한다.
+  속성은 요소에 추가적인 정보를 제공하여 컴포넌트의 특징이나 상황을 정의한다.
+  ```js
+  aria-label="검색" // 검색 관련임을 의미한다
+  aria-labelledby="id" // 다른 요가 이 요소의 레이블임을 명시한다.
+``` 
+  
 - States
+  상태는 요소에 상태 정보를 나타내어 동적 변화를 정의한다.
+  ```js
+  aria-checked="true" // 해당 요소가 체크된 상태임을 나타낸다.
+  aria-expanded="false" // 확장 가능한 요소가 닫힌 상태임을 나타낸다.
+```
+
+https://developer.mozilla.org/ko/docs/Web/Accessibility/ARIA/Attributes
+
+## 특징
+
+WAI-ARIA의 장점은 
+- 접근성 강화: 장애가 있는 사용자에게 요소의 기본적인 역할 또는 정보를 제공하여 웹 앱의 접근성을 강화한다.
+- 동적 컨텐츠 지원: 자바스크립트를 이용하여 상태를 쉽게 업데이트 할 수 있다.
+- 사용자 경험 향상: 보조기기 사용자가 웹 요소의 상태를 더 정확히 이해하고 상호작용할 수 있다.
+
+주의할 점은 의미가 있는 요소에는 특히 HTML5에서는 기존에 있는 요소를 활용해야 하며 잘못 사용하면 잘못된 정보를 제공할 수 있어 적절하게 사용해야한다.
