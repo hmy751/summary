@@ -1,4 +1,5 @@
 # CORS
+---
 CORS(Cross-Origin Resource Sharing)는 브라우저가 자신의 출처가 아닌 다른 출처로 자원을 서버에 요청하는 상황에서, 서버가 요청의 허가를 결정하는 HTTP 헤더 기반 메커니즘이다.
 단순 요청(Simple requests)이 아닌 사전 요청(Preflighted requests)에 의해서도 결정된다.
 
@@ -87,4 +88,9 @@ https://developer.mozilla.org/ko/docs/Web/HTTP/CORS#%EC%A0%91%EA%B7%BC_%EC%A0%9C
 
 # CSP(Content-Security-Policy)
 ---
-컨텐츠 보안 정책(CSP)은 
+컨텐츠 보안 정책(CSP)은 교차 사이트 스크립팅(Cross-site scripting, CSR)공격을 탐지하고 완하하는 추가 보안계층을 말한다. 
+
+CSP는 HTTP헤더에 추가하여 정책을 추가할 수 있다.
+```http
+	Content-Security-Policy: policy
+```
