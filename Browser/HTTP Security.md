@@ -88,12 +88,43 @@ https://developer.mozilla.org/ko/docs/Web/HTTP/CORS#%EC%A0%91%EA%B7%BC_%EC%A0%9C
 
 # CSP(Content-Security-Policy)
 ---
-컨텐츠 보안 정책(CSP)은 교차 사이트 스크립팅(Cross-site scripting, CSR)공격을 탐지하고 완하하는 추가 보안계층을 말한다. 
+컨텐츠 보안 정책(CSP)은 교차 사이트 스크립팅(Cross-site scripting, CSR)공격을 탐지하고 예방하는 추가 보안계층을 말한다. 
 
 CSP는 HTTP헤더에 추가하여 정책을 추가할 수 있다.
 ```http
-	Content-Security-Policy: policy
+Content-Security-Policy: policy
 ```
+HTTP헤더로 전달되면 브라우저는 이를 읽어 허용된 리소스만 로드 및 실행되도록 한다.
+특정 스크립트의 출처를 명시하여 허가되지 않은 스크립트나 스타일의 로딩을 차단할 수 있다.
+
+## CSP 디렉티브
+
+- default-src
+  기본 리소스 로딩 정책을 의미한다. 지정되지 않는 경우 다른 모든 리소스 유형의 기본 출처로 적용된다.
+```http
+Content-Security-Policy: default-src 'self'
+```
+	self는 현재 도메인,자체 출처만 허용한다는 의미다.
+- script-src
+  JS소스의 허용된 출처를 정의한다. 
+  ```http
+  `Content-Security-Policy: script-src 'self' https://trusted-scripts.com`
+```
+현재 도메인 및 https://trusted-scripts.com특정 도메인 까지 허용한다.
+- style-src
+  CSS소스의 허용된 출처를 정의한다.
+  ```http
+  Content-Security-Policy: style-src 'self' https://trusted-styles.com
+```
+- img-src
+  이미지의 허용된 출처를 정의한다. 이를 통해 외부 이미지 로드를 제한한다.
+  ```http
+  Content-Security-Policy: img-src 'self' data:
+```
+data: URL로 인코딩된 이미지만 허용한다.
+
+CSP는 클라이언트 측에서 모든 리소스 로딩의 출처를 제한하여 악성 스크립트를 방지한다.
+보통 서버측에서 응답 헤더에 Content-Security-Policy: default-src 'self'`
 
 
 ## XSS(Cross-site-scripting)
