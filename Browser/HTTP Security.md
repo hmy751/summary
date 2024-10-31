@@ -110,7 +110,7 @@ Content-Security-Policy: default-src 'self'
   ```http
   `Content-Security-Policy: script-src 'self' https://trusted-scripts.com`
 ```
-현재 도메인 및 https://trusted-scripts.com특정 도메인 까지 허용한다.
+	현재 도메인 및 https://trusted-scripts.com특정 도메인 까지 허용한다.
 - style-src
   CSS소스의 허용된 출처를 정의한다.
   ```http
@@ -121,7 +121,7 @@ Content-Security-Policy: default-src 'self'
   ```http
   Content-Security-Policy: img-src 'self' data:
 ```
-data: URL로 인코딩된 이미지만 허용한다.
+	data: URL로 인코딩된 이미지만 허용한다.
 
 CSP는 클라이언트 측에서 모든 리소스 로딩의 출처를 제한하여 악성 스크립트를 방지한다.
 보통 서버측에서 응답 헤더에 `Content-Security-Policy: default-src 'self'`를 포함하여 보낸다.
