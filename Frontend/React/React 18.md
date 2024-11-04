@@ -14,10 +14,9 @@ https://github.com/reactwg/react-18/discussions/46
 자동 배칭(automatic batching)은 모든 상태변경에 대해 리액트가 자동으로 한 번에 모아 일괄적으로 처리하는 방식이다. 이전에는 이벤트 핸들러 내부에서 setState를 여러번 실행할 경우에만 지원됐다. 18버전 이후에는 이벤트 핸들러 외부 뿐만아니라 비동기 이벤트에서도 자동 배치가 이뤄진다.
 다만 루트 컴포넌트의 createRoot메서드를 사용할 시에 자동 배칭 기능이 적용된다.
 
+## useTransition, useDeferredValue
 
 
-
-automatic batching
 
 배칭은 핸들러 뿐만 아니라 fetch내에서도 setState를 한 번에 업데이트 할 수 있도록 배칭 기능이 지원됐습니다.
 
