@@ -3,6 +3,8 @@ https://react.dev/blog/2022/03/29/react-v18
 # Concurrent 
 ---
 18버전에서 가장 크게 개선된 특징은 동시성(concurrent)지원이다. 동시성은 한 코어 안에서 여러 작업을 컨텍스트 스위칭을 하여 
+리액트의 동시성은 기능이 아니라, 화면에 UI동작을 
+병렬과는 다르게 
 
 18버전부터 달라진 점은 우선 동시성 concurrent mode, 배칭automatic batcing 등이 있습니다.
 
