@@ -211,3 +211,58 @@ typeof undefined === 'undefined';
 
 - NaN, isNaN()
 먼저 NaN은 Not-A-Number로 숫자가 아님을 나타낸다. 
+
+## 데이터 비교
+
+### 동등, 일치 연산자
+동등 연산자`==`는 타입이 아닌 값만 비교하는 연산자로 불리언 결과를 반환하며 1과 '1'을 같다고 판별한다.
+일치 연산자`===`는 타입과 값을 모두 비교하는 연산자로 불리언 결과를 반환하며 타입과 값이 모두 같아야 같다고 판별한다.
+
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Equality
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality
+
+
+### Object.is()
+^ef3ef9
+두 개의 인자를 비교하여 같은 값인지 판별하는 메서드이다.
+`===` 연산자와 같지만 0, -0의 비교를 false로 처리하고, 서로 다른 NaN은 true 처리하여 좀 더 개발자가 기대하는 방식으로 비교처리를 한다.
+
+Object.is는 `===`연산자의 약점을 보완하고자 하며 해결되지 않는 예외 케이스 0, -0 NaN을 다르게 처리한다.
+
+###동작 방식 차이
+
+### 비교 특이 케이스
+- NaN
+NaN은 자기 자신과 같지않은 특이한 값으로 일치 연산자 비교에서도 false를 반환한다.
+그래서 Object.is나 Number.isNaN 메서드를 활용해야 한다.
+```js
+console.log(NaN === NaN); // false
+console.log(Object.is(NaN, NaN)); // true
+console.log(Number.isNaN(NaN)); // true
+```
+
+- null, undefined
+null과 undefined는 `==`비교시 같다고 평가되지만, `===`비교에서는 다르다고 판별된다.
+```js
+console.log(null == undefined); // true
+console.log(null === undefined); // false
+```
+
+- +0, -0
+0, -0은 일치 연산자는 같다고 판별하지만 Object.is는 다르다고 판별한다.
+```js
+console.log(Object.is(0, -0)); // false
+```
+
+- Infinity, -Infinity
+```js
+console.log(Infinity === Infinity); // true
+console.log(Infinity === -Infinity); // false
+```
+
+- 0n, 0
+BigInt는 일반 숫자는 같은 0일지라도 다른 타입으로 판별된다.
+```js
+console.log(0n === 0); // false
+console.log(Object.is(0n, 0)); // false
+```
