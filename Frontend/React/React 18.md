@@ -11,21 +11,65 @@ https://github.com/reactwg/react-18/discussions/46
 
 ## Automatic batching, createRoot
 
-자동 배칭(automatic batching)은 모든 상태변경에 대해 리액트가 자동으로 한 번에 모아 일괄적으로 처리하는 방식이다. 이전에는 이벤트 핸들러 내부에서 setState를 여러번 실행할 경우에만 지원됐다. 18버전 이후에는 이벤트 핸들러 외부 뿐만아니라 비동기 이벤트에서도 자동 배치가 이뤄진다.
+자동 배칭(automatic batching)은 모든 상태변경에 대해 리액트가 자동으로 한 번에 모아 일괄적으로 처리하는 방식이다. 
+이전에는 이벤트 핸들러 내부에서 setState를 여러번 실행할 경우에만 지원됐다. 18버전 이후에는 이벤트 핸들러 외부 뿐만아니라 비동기 이벤트에서도 자동 배치가 이뤄진다.
 다만 루트 컴포넌트의 createRoot메서드를 사용할 시에 자동 배칭 기능이 적용된다.
 
-## useTransition, useDeferredValue
+## Concurrent Features, useTransition, useDeferredValue
 
+18에서 추가된 기능으로 동시성을 기반으로 구현된 기능이다.
+동시성을 기반으로 배칭등 작업을 효율적이게 처리하지만 일부 업데이트를 개발자가 직접 명시하여 의도적으로 우선순위를 낮추어 렌더링 브로킹을 방지하며 UI의 변화를 자연스럽게 하기위한 기능이다.
 
+useTransition은 상태 변화 메서드를 의도적으로 우선수위를 낮추는 기능이다.
+```js
+const App = () => {
+  const [text, setText] = useState('');
+  const [isPending, startTransition] = useTransition();
+  const filteredItems = filterItems(text);
 
-배칭은 핸들러 뿐만 아니라 fetch내에서도 setState를 한 번에 업데이트 할 수 있도록 배칭 기능이 지원됐습니다.
+  const updateFilter = e => {
+    startTransition(() => {
+      setText(e.target.value);
+    });
+  };
 
-createRoot를 통해 동시성, 오토 배칭을 지원한
+  return (
+    <div className="container">
+      <input type="text" name="user-input" onChange={updateFilter} />
+      <label htmlFor="user-input" className={isPending ? 'show' : 'hide'}>
+        pending...
+      </label>
+      <List items={filteredItems} />
+    </div>
+  );
+};
 
-## useTransition, useDeferredValue, useSyncExternalStore
+```
+
+useDeferredValue는 값의 업데이트의 우선순위를 낮춘다.
+주로 props로 받는 값등 제어할 수 없는 값에대해 사용을 권장한다.
+```js
+const List = ({ items }) => {
+  const deferredItems = useDeferredValue(items);
+
+  return (
+    <ul>
+      {deferredItems.map(item => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
+};
+
+```
 
 https://tecoble.techcourse.co.kr/post/2023-07-09-concurrent_rendering/
 
-## Suspense
+## Suspense, Streaming, Selective Hydrating
+
+
 
 streaming ssr
+
+## React Server Components(RSC)
+
