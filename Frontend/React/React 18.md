@@ -65,10 +65,19 @@ const List = ({ items }) => {
 
 https://tecoble.techcourse.co.kr/post/2023-07-09-concurrent_rendering/
 
-## Suspense, Streaming, Selective Hydrating
+## Streaming SSR, Suspense, Selective Hydrating
 
+기존에 워터펄 방식에서는
+데이터 패칭(서버) => HTML 렌더링(서버) => 자바스크립트 코드 로드(클라이언트) => hydration(클라이언트)
+순서로 실행되기 때문에 어느 부분이라도 지연된다면 다음 단계가 실행되지 않고 블로킹되며 비효율적이며 사용자 경험에 문제가 있었다.
 
+그래서 18버전 부터는 스트리밍과 suspense를 활용하여 문제를 해결했다.
 
+먼저 스트리밍을 활용하기 위해 renderToString대신 pipeToNodeWritable를 활용하여 청크 단위로 나누어 전달할 수 있게 하고 suspense를 활용하여 데이터 요청이 있는 UI를 감싸 
+기존 스트리밍은 데이터 로딩에서 블로킹을 발생시킬 수 있다.
+
+https://blog.mathpresso.com/suspense-ssr-architecture-in-react-18-ec75e80eb68d
+https://saengmotmi.netlify.app/react/streaming_ssr/
 streaming ssr
 https://github.com/reactwg/react-18/discussions/37
 ## React Server Components(RSC)
