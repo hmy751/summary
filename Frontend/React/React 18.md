@@ -73,12 +73,17 @@ https://tecoble.techcourse.co.kr/post/2023-07-09-concurrent_rendering/
 
 그래서 18버전 부터는 스트리밍과 suspense를 활용하여 문제를 해결했다.
 
-먼저 스트리밍을 활용하기 위해 renderToString대신 pipeToNodeWritable를 활용하여 청크 단위로 나누어 전달할 수 있게 하고 suspense를 활용하여 데이터 요청이 있는 UI를 감싸 
-기존 스트리밍은 데이터 로딩에서 블로킹을 발생시킬 수 있다.
+먼저 스트리밍을 활용하기 위해 renderToString대신 pipeToNodeWritable를 활용하여 청크 단위로 나누어 전달할 수 있게 하고 suspense를 활용하여 데이터 요청이 있는 UI를 감싸 선언적으로 fallback시켜 블로킹을 방지할 수 있게 한다.
+
+그래서 suspense이외의 UI는 기다리지 않고 바로 hydration까지 가능하게 되었다.
+
+만약 일부 유저 이벤트가 발생한다면 리액트는 동시성을 지원하므로 다른 작업을 잠시 중단하고 먼저 처리하여 사용자 경험을 개선했다.
+
+또 suspense를 다른 컴포넌트에 배치하여 hydrate의 우선순위도 조정할 수 있는데 상위의 suspense부터 hydrating을 먼저 시작한다.
+하지만 만약 다른 컴포넌트를 클릭하게 되면 유저 이벤트가 발생한 부분부터 즉시 처리한다.
 
 https://blog.mathpresso.com/suspense-ssr-architecture-in-react-18-ec75e80eb68d
 https://saengmotmi.netlify.app/react/streaming_ssr/
-streaming ssr
 https://github.com/reactwg/react-18/discussions/37
 ## React Server Components(RSC)
 
