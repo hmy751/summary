@@ -70,6 +70,6 @@ https://tecoble.techcourse.co.kr/post/2023-07-09-concurrent_rendering/
 
 
 streaming ssr
-
+https://github.com/reactwg/react-18/discussions/37
 ## React Server Components(RSC)
 
