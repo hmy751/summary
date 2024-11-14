@@ -65,3 +65,5 @@ https://engineering.linecorp.com/ko/blog/monorepo-with-turborepo
 
 # Babel, Webpack
 ---
+바벨 - 트랜스파일러
+웹펙 - 모듈 번들러
