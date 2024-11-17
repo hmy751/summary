@@ -63,7 +63,12 @@ https://green-labs.github.io/monorepo-microfrontend
 https://f-lab.kr/blog/everything-about-the-microfrontend
 https://engineering.linecorp.com/ko/blog/monorepo-with-turborepo
 
-# Babel, Webpack
+# Moudule, Babel, Webpack
 ---
+모듈이란 
+
+
 바벨 - 트랜스파일러
 웹펙 - 모듈 번들러
+
+
