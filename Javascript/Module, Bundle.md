@@ -61,8 +61,83 @@ src/js 폴더에 있는 모든 자바스크립트 파일들을 트랜스 파일�
 
 추가로 필요한 바벨 플러그인은 Babel 홈페이지에서 찾아서 필요에 맞게 설치하여 적용하면 된다.
 ### Babel 모듈 로딩
-바벨로 트랜스파일링을 하게되면 
+바벨로 트랜스파일링을 하게되면 설정에 따라 달라지지만 빌드 타임에 실행되며, ESM이 미비햇던 과거 관행을 따라 자동적으로 Commonjs방식의 모듈로 변환한다. 따라서 브라우저는 require함수를 지원하지 않으므로 에러가 발생한다.
 
-과거 관행과 런타임 이전 빌드 시점에 결정
+더 자세히 보면
+@babel/preset-env는 자동적으로 modules옵션이 auto로 설정이되어 있어 Commonjs로 변환하게 된다.
+그리고 런타임이 아니라 빌드 타임을 기준으로 한다.
+
+물론 설정을 적용하면 ESM을 유지할 수 있다.
+```json
+{
+  "presets": [
+    ["@babel/preset-env", { "modules": false }]
+  ]
+}
+
+```
+
+정리하면 바벨은 주목적이 브라우저 호환성을 위해 트랜스파일링 하며, ESM을 지원하기 때문에 모듈 기능이 가능하지만 부족하기 때문에 웹팩을 통하여 모듈 번들러를 적용한다.
+
 ## Webpack
 
+웹팩(Webpack)은 모듈 번들러로 의존 관계에 있는 자바스크립트, CSS, 이미지 등의 리소스들을 하나의 파일로 번들링 한다.
+의존 모듈이 하나의 파일로 번들링되므로 별도의 모듈 로더가 필요없다. 따라서 여러개의 script태그로 로드할 필요도 없다.
+
+### Webpack 설정
+
+웹팩을 설치하고 웹팩이 모듈을 번들링할 때 바벨을 사용하여 ES6+사양의 코드를 ES5사양의 코드로 트랜스파일링 하도록 babel-loader를 설치한다.
+```json
+{
+	devDpendencies: {
+		"@babel/cli": "",
+		"@babel/core": "",
+		"@bael/preset-env": "",
+		"@babel-loader": "" ,
+		"webpack": ""
+	}
+}
+```
+
+webpack.config.js는 웹팩이 실행될 때 참조하는 설정 파일이다. 
+```js
+module.exports = {
+	entry: "src/js/main.js",
+	outut: {
+		path: path.resolve(__dirname, 'dis'),
+		filename: 'js/bundle.js'
+	},
+	module: {
+		rules: [
+			{
+				test: ^.js%/,
+				include: [
+					path.resolve(__dirname, 'src/js')
+				],
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: ['@babel/preset-env'],
+						plugins: ['@babel/plugin-proposal-class-proeries']
+					}
+				}
+			}
+		]
+	}
+
+}
+```
+
+이렇게 실행하면 mian.js, lib.js 모듈이 하나로 번들링된 bundle.js가 빌드된다.
+
+### babel-polyfill
+바벨을 사용하면 문법만 변환한다 따라서 Promise, Object.assign, Array.from 등 런타임에 활용되는 ES6에 추가된 기능은 대체할 수 없기 때문에 트랜스파일링 되지않고 그대로 남는다.
+
+그래서 babel-polyfill이 필요하다. 폴리필은 개발환경 뿐만 아니라 런타임 환경에도 영향을 준다.
+entry에 추가하여 적용한다.
+```json
+module.exports = {
+	entry: ['@babel/polyfill', 'src/js/main.js']
+}
+```
